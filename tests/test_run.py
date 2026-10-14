@@ -16,12 +16,17 @@ VALID = json.dumps(prediction_payload()["output"], ensure_ascii=False)
 def _runner(*texts: str):
     """呼ばれるたびに texts を順に返す偽の API。"""
     calls: list[str] = []
+    searches: list[bool] = []
 
-    def call(model_id: str, system: str, user: str, max_output_tokens: int) -> RunnerResult:
+    def call(model_id: str, system: str, user: str, max_output_tokens: int, web_search: bool = False) -> RunnerResult:
         calls.append(user)
-        return RunnerResult(text=texts[len(calls) - 1], input_tokens=1000, output_tokens=500, reasoning_tokens=100)
+        searches.append(web_search)
+        return RunnerResult(
+            text=texts[len(calls) - 1], input_tokens=1000, output_tokens=500, reasoning_tokens=100, tool_calls=3 if web_search else 0
+        )
 
     call.calls = calls  # type: ignore[attr-defined]
+    call.searches = searches  # type: ignore[attr-defined]
     return call
 
 
@@ -44,7 +49,7 @@ def test_build_prompt_a_has_no_candidates() -> None:
 
 def test_build_prompt_rejects_unknown_condition() -> None:
     with pytest.raises(ValueError):
-        build_prompt("C")
+        build_prompt("D")
 
 
 def test_estimate_scales_with_n() -> None:
@@ -92,19 +97,20 @@ def test_run_once_records_api_error_after_retries(tmp_path: Path) -> None:
     calls: list[int] = []
     waits: list[float] = []
 
-    def boom(*_: object) -> RunnerResult:
+    def boom(*_: object, **__: object) -> RunnerResult:
         calls.append(1)
         raise RuntimeError("503 UNAVAILABLE")
 
     log = run_once(SPEC, "B", 1, build_prompt("B"), boom, tmp_path, sleep=waits.append)
     assert log.status == "error" and "503" in (log.error or "")
     assert len(calls) == 4 and waits == [10.0, 30.0, 90.0]
+    assert log.api_retries == 3
 
 
 def test_run_once_recovers_from_transient_error(tmp_path: Path) -> None:
     state = {"n": 0}
 
-    def flaky(*_: object) -> RunnerResult:
+    def flaky(*_: object, **__: object) -> RunnerResult:
         state["n"] += 1
         if state["n"] == 1:
             raise RuntimeError("503 UNAVAILABLE")
@@ -145,3 +151,31 @@ def test_main_runs_and_logs(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> 
     assert [log.run_no for log in logs] == [3, 4]
     assert all(log.status == "ok" for log in logs)
     assert len(list((tmp_path / "p").rglob("*.json"))) == 2
+
+
+# --- 条件 C（Web 検索） ---
+
+
+def test_build_prompt_c_asks_to_search_without_candidates() -> None:
+    p = build_prompt("C")
+    assert "Web 検索" in p.user
+    assert "織田 翔希" not in p.user
+
+
+def test_estimate_c_includes_search() -> None:
+    p = build_prompt("C")
+    assert estimate_max_cost(SPEC, p, 1, web_search=True) > estimate_max_cost(SPEC, p, 1)
+
+
+def test_run_once_c_searches_only_on_first_attempt(tmp_path: Path) -> None:
+    runner = _runner('{"first_round": []}', VALID)
+    log = run_once(SPEC, "C", 1, build_prompt("C"), runner, tmp_path)
+    assert runner.searches == [True, False]  # 出し直しでは検索させない
+    assert log.status == "ok" and log.tool_calls == 3
+    assert log.cost_usd == pytest.approx(SPEC.cost_usd(2000, 1000, 3), abs=1e-6)
+
+
+def test_run_once_b_never_searches(tmp_path: Path) -> None:
+    runner = _runner(VALID)
+    run_once(SPEC, "B", 1, build_prompt("B"), runner, tmp_path)
+    assert runner.searches == [False]
