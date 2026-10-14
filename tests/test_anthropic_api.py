@@ -73,3 +73,17 @@ def test_no_tools_without_web_search(fake):
     client = fake([_msg([_text("{}")], "end_turn", 0)])
     anthropic_api.call("m", "sys", "u", 1000)
     assert client.requests[0]["tools"] == []
+
+
+def test_tool_use_stop_on_server_tool_resumes(fake):
+    b1 = _search(1)
+    client = fake([_msg([b1], "tool_use", 1), _msg([_text("{}")], "end_turn", 1)])
+    res = anthropic_api.call("m", "sys", "u", 1000, web_search=True)
+    assert len(client.requests) == 2 and client.requests[1]["messages"][1]["content"] == [b1]
+    assert res.text == "{}" and res.tool_calls == 2
+
+
+def test_tool_use_stop_on_other_block_does_not_resume(fake):
+    client = fake([_msg([_text("メモ")], "tool_use", 1)])
+    res = anthropic_api.call("m", "sys", "u", 1000, web_search=True)
+    assert len(client.requests) == 1 and res.stop_reason == "tool_use(last=text)"

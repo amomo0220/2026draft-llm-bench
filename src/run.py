@@ -1,6 +1,7 @@
 """予測を実行して predictions/ に保存し、実行ログを runs/runs.jsonl に記録する。
 
 現在の対応: 条件 A（情報なし）・B（候補者一覧をコンテキストに入れる）・C（各社 API の Web 検索）。D・H は未実装。
+条件 C は2段階: Web 検索ありで調査メモを書かせ、検索なしでメモから JSON を出力させる（docs/PLAN.md 3.2）。
 
 出力は各社の JSON モードで受け取り、PredictionOutput（src/schema.py）で検証する。
 スキーマ違反のときは、エラー内容を添えて1回だけ出し直しを求める（attempts に記録）。
@@ -31,7 +32,6 @@ from src.schema import Prediction, PredictionOutput
 
 PROMPTS = Path("prompts")
 CONDITIONS = ("A", "B", "C")
-WEB_SEARCH_CONDITIONS = ("C",)
 MAX_OUTPUT_TOKENS = 32_000
 MAX_ATTEMPTS = 2  # 初回＋スキーマ違反時の出し直し1回
 CHARS_PER_TOKEN = 1.0  # 日本語の見積もり用（実測で見直す）
@@ -65,14 +65,29 @@ def call_with_retry(
     raise AssertionError("unreachable")
 
 
+NOTES_PLACEHOLDER = "{{NOTES}}"
+
+
 @dataclass(frozen=True)
-class Prompt:
+class Research:
+    """条件 C の1段目（Web 検索ありの調査）のプロンプト。"""
+
     system: str
     user: str
 
+
+@dataclass(frozen=True)
+class Prompt:
+    system: str
+    user: str  # research があるときは NOTES_PLACEHOLDER を含み、調査メモで置き換えてから使う
+    research: Research | None = None
+
     @property
     def sha256(self) -> str:
-        return hashlib.sha256(f"{self.system}\n\n{self.user}".encode()).hexdigest()
+        parts = [self.system, self.user]
+        if self.research:
+            parts += [self.research.system, self.research.user]
+        return hashlib.sha256("\n\n".join(parts).encode()).hexdigest()
 
 
 def _candidates_table(path: Path) -> str:
@@ -88,21 +103,34 @@ def build_prompt(condition: str, prompts_dir: Path = PROMPTS, candidates: Path =
     if condition == "B":
         context = (prompts_dir / "context_B.md").read_text(encoding="utf-8")
         user = context.replace("{{CANDIDATES}}", _candidates_table(candidates)) + "\n\n" + user
-    elif condition == "C":
+    research = None
+    if condition == "C":
         user = (prompts_dir / "context_C.md").read_text(encoding="utf-8") + "\n\n" + user
-    return Prompt(system=(prompts_dir / "system.md").read_text(encoding="utf-8"), user=user)
+        research = Research(
+            system=(prompts_dir / "research_system.md").read_text(encoding="utf-8"),
+            user=(prompts_dir / "research_C.md").read_text(encoding="utf-8"),
+        )
+    return Prompt(system=(prompts_dir / "system.md").read_text(encoding="utf-8"), user=user, research=research)
 
 
-# 検索結果は入力トークンとして課金される。検索1回あたりの上乗せの目安（実測で見直す）
-SEARCH_RESULT_TOKENS = 5_000
+# 検索結果は入力トークンとして課金される。検索1回あたりの上乗せの目安。
+# Claude は pause_turn から再開するたびに、それまでの検索結果を入力として送り直すため大きい（2段階の試行で 59.6万 / 10回）
+SEARCH_RESULT_TOKENS = 60_000
 
 
-def estimate_max_cost(spec: ModelSpec, prompt: Prompt, n: int, web_search: bool = False) -> float:
-    """見積もりの上限。出力は max_output_tokens を使い切り、全実行で出し直しが起きた場合。"""
+def estimate_max_cost(spec: ModelSpec, prompt: Prompt, n: int) -> float:
+    """見積もりの上限。出力は max_output_tokens を使い切り、全実行で出し直しが起きた場合。
+
+    調査メモ（条件 C）は整形の入力に入るので、整形の入力にも max_output_tokens を足す。
+    """
     input_tokens = int((len(prompt.system) + len(prompt.user)) / CHARS_PER_TOKEN)
-    per_attempt = spec.cost_usd(input_tokens + MAX_OUTPUT_TOKENS, MAX_OUTPUT_TOKENS)
-    search = spec.cost_usd(MAX_SEARCHES * SEARCH_RESULT_TOKENS, 0, MAX_SEARCHES) if web_search else 0.0
-    return (per_attempt * MAX_ATTEMPTS + search) * n
+    notes = MAX_OUTPUT_TOKENS if prompt.research else 0
+    per_attempt = spec.cost_usd(input_tokens + notes + MAX_OUTPUT_TOKENS, MAX_OUTPUT_TOKENS)
+    research = 0.0
+    if prompt.research:
+        r_input = int((len(prompt.research.system) + len(prompt.research.user)) / CHARS_PER_TOKEN)
+        research = spec.cost_usd(r_input + MAX_SEARCHES * SEARCH_RESULT_TOKENS, MAX_OUTPUT_TOKENS, MAX_SEARCHES)
+    return (per_attempt * MAX_ATTEMPTS + research) * n
 
 
 _FENCE = re.compile(r"^```(?:json)?\s*|\s*```$")
@@ -136,6 +164,7 @@ class RunLog(BaseModel):
     status: str  # ok / invalid_output / error
     error: str | None = None
     prediction_path: str | None = None
+    research_path: str | None = None  # 条件 C の調査メモ
 
 
 def run_once(
@@ -151,33 +180,49 @@ def run_once(
     run_id = f"{condition}-{spec.model_id}-{run_no:02d}-{started.strftime('%Y%m%dT%H%M%SZ')}"
     t0 = time.monotonic()
     totals = {"in": 0, "out": 0, "reasoning": None, "tools": 0, "retries": 0}
-    user, attempts, status, error, path = prompt.user, 0, "invalid_output", None, None
-    search = condition in WEB_SEARCH_CONDITIONS
+    attempts, status, error, path, research_path = 0, "invalid_output", None, None, None
+    base_user = prompt.user
+    out_dir = predictions_dir / condition / spec.model_id
+
+    def add(res: RunnerResult, retries: int) -> None:
+        totals["retries"] += retries
+        totals["in"] += res.input_tokens
+        totals["out"] += res.output_tokens
+        totals["tools"] += res.tool_calls
+        if res.reasoning_tokens is not None:
+            totals["reasoning"] = (totals["reasoning"] or 0) + res.reasoning_tokens
 
     try:
+        if prompt.research:
+            # 1段目: Web 検索ありで調査メモを書かせる
+            res, retries = call_with_retry(
+                runner, (spec.model_id, prompt.research.system, prompt.research.user, MAX_OUTPUT_TOKENS), sleep, web_search=True
+            )
+            add(res, retries)
+            if not res.text.strip():
+                raise ValueError(f"調査メモが空です（stop_reason={res.stop_reason}）")
+            out_dir.mkdir(parents=True, exist_ok=True)
+            notes = out_dir / f"{run_id}.research.md"
+            notes.write_text(res.text, encoding="utf-8")
+            research_path = str(notes)
+            base_user = prompt.user.replace(NOTES_PLACEHOLDER, res.text)
+        user = base_user
+        # 2段目（条件 A・B は1段目のみ）: 検索なしで JSON を出力させる。スキーマ違反なら1回だけ出し直す
         while attempts < MAX_ATTEMPTS:
             attempts += 1
-            # 出し直しは形式の修正だけなので検索させない
-            res, retries = call_with_retry(
-                runner, (spec.model_id, prompt.system, user, MAX_OUTPUT_TOKENS), sleep, web_search=search and attempts == 1
-            )
-            totals["retries"] += retries
-            totals["in"] += res.input_tokens
-            totals["out"] += res.output_tokens
-            totals["tools"] += res.tool_calls
-            if res.reasoning_tokens is not None:
-                totals["reasoning"] = (totals["reasoning"] or 0) + res.reasoning_tokens
+            res, retries = call_with_retry(runner, (spec.model_id, prompt.system, user, MAX_OUTPUT_TOKENS), sleep)
+            add(res, retries)
             try:
                 output = PredictionOutput.model_validate_json(extract_json(res.text))
             except ValidationError as e:
                 error = f"stop_reason={res.stop_reason}: {e.error_count()}件のスキーマ違反: {str(e)[:2000]}"
                 user = (
-                    f"{prompt.user}\n\n---\n前回の出力はスキーマに違反していました。\n{error}\n\n"
+                    f"{base_user}\n\n---\n前回の出力はスキーマに違反していました。\n{error}\n\n"
                     f"前回の出力:\n{res.text[:20000]}\n\n修正した JSON だけを出力してください。"
                 )
                 continue
             pred = Prediction(run_id=run_id, model_id=spec.model_id, condition=condition, output=output)
-            out = predictions_dir / condition / spec.model_id / f"{run_id}.json"
+            out = out_dir / f"{run_id}.json"
             out.parent.mkdir(parents=True, exist_ok=True)
             out.write_text(pred.model_dump_json(indent=1), encoding="utf-8")
             status, error, path = "ok", None, str(out)
@@ -201,12 +246,13 @@ def run_once(
         input_tokens=totals["in"],
         output_tokens=totals["out"],
         reasoning_tokens=totals["reasoning"],
-        cost_usd=round(spec.cost_usd(totals["in"], totals["out"], totals["tools"] if search else 0), 6),
+        cost_usd=round(spec.cost_usd(totals["in"], totals["out"], totals["tools"]), 6),
         tool_calls=totals["tools"],
         api_retries=totals["retries"],
         status=status,
         error=error,
         prediction_path=path,
+        research_path=research_path,
     )
 
 
@@ -238,7 +284,7 @@ def main(argv: list[str] | None = None, runner: RunnerFn | None = None) -> int:
 
     spec = MODELS[args.model]
     prompt = build_prompt(args.condition)
-    estimate = estimate_max_cost(spec, prompt, args.n, web_search=args.condition in WEB_SEARCH_CONDITIONS)
+    estimate = estimate_max_cost(spec, prompt, args.n)
     print(f"{spec.model_id} 条件{args.condition} × {args.n}回: 見積もり上限 ${estimate:.2f}（prompt {prompt.sha256[:12]}）")
     if args.dry_run:
         return 0

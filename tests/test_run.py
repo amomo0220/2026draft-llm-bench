@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 from src.models import MODELS
-from src.run import RunLog, build_prompt, estimate_max_cost, extract_json, main, run_once
+from src.run import NOTES_PLACEHOLDER, Prompt, RunLog, build_prompt, estimate_max_cost, extract_json, main, run_once
 from src.runners.base import RunnerResult
 from src.schema import Prediction
 from tests.dummy_draft import prediction_payload
@@ -156,23 +156,43 @@ def test_main_runs_and_logs(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> 
 # --- 条件 C（Web 検索） ---
 
 
-def test_build_prompt_c_asks_to_search_without_candidates() -> None:
+def test_build_prompt_c_has_research_stage_without_candidates() -> None:
     p = build_prompt("C")
-    assert "Web 検索" in p.user
-    assert "織田 翔希" not in p.user
+    assert p.research is not None
+    assert "Web 検索" in p.research.user
+    assert "{{SCHEMA}}" not in p.research.user and "first_round" not in p.research.user  # 調査では出力形式を求めない
+    assert NOTES_PLACEHOLDER in p.user and '"first_round"' in p.user
+    assert "織田 翔希" not in p.user + p.research.user
 
 
-def test_estimate_c_includes_search() -> None:
+def test_prompt_hash_covers_research_stage() -> None:
     p = build_prompt("C")
-    assert estimate_max_cost(SPEC, p, 1, web_search=True) > estimate_max_cost(SPEC, p, 1)
+    assert p.sha256 != Prompt(p.system, p.user).sha256
 
 
-def test_run_once_c_searches_only_on_first_attempt(tmp_path: Path) -> None:
-    runner = _runner('{"first_round": []}', VALID)
+def test_estimate_c_includes_research_and_search() -> None:
+    p = build_prompt("C")
+    assert estimate_max_cost(SPEC, p, 1) > estimate_max_cost(SPEC, Prompt(p.system, p.user), 1)
+
+
+def test_run_once_c_researches_then_formats(tmp_path: Path) -> None:
+    runner = _runner("調査メモ: 某球団が1位を公言 https://example.com/a", '{"first_round": []}', VALID)
     log = run_once(SPEC, "C", 1, build_prompt("C"), runner, tmp_path)
-    assert runner.searches == [True, False]  # 出し直しでは検索させない
-    assert log.status == "ok" and log.tool_calls == 3
-    assert log.cost_usd == pytest.approx(SPEC.cost_usd(2000, 1000, 3), abs=1e-6)
+    assert runner.searches == [True, False, False]  # 検索は調査だけ。整形と出し直しでは検索させない
+    assert "Web 検索" in runner.calls[0]
+    assert "https://example.com/a" in runner.calls[1] and NOTES_PLACEHOLDER not in runner.calls[1]
+    assert "https://example.com/a" in runner.calls[2]  # 出し直しにもメモを入れる
+    assert log.status == "ok" and log.attempts == 2 and log.tool_calls == 3
+    assert log.cost_usd == pytest.approx(SPEC.cost_usd(3000, 1500, 3), abs=1e-6)
+    assert Path(log.research_path).read_text(encoding="utf-8").startswith("調査メモ")
+    assert Path(log.research_path).name == f"{log.run_id}.research.md"
+
+
+def test_run_once_c_empty_notes_is_error(tmp_path: Path) -> None:
+    runner = _runner("  ", VALID)
+    log = run_once(SPEC, "C", 1, build_prompt("C"), runner, tmp_path)
+    assert log.status == "error" and "調査メモが空" in log.error
+    assert len(runner.calls) == 1 and log.prediction_path is None
 
 
 def test_run_once_b_never_searches(tmp_path: Path) -> None:
