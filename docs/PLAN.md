@@ -67,7 +67,9 @@
 
 - プロ志望届の提出者一覧（高校・大学）＋ 社会人・独立リーグの主な候補 → `data/candidates.csv`
 - 高校生・大学生は志望届の提出が指名の前提。**志望届を出していない高校生・大学生の名前が出たら、ハルシネーション（または指名不可）と判定**できる
-- 列の例: `player_id, name, kana, category(高校/大学/社会人/独立), team, position, throws_bats, source_url`
+- 列: `player_id, name, kana, category(高校/大学/社会人/独立), team, position, throws_bats, source_url`（検証は `src/candidates.py`）
+- `player_id` は区分ごとの接頭辞＋3桁の連番: `HS-001`（高校）／`UN-001`（大学）／`SH-001`（社会人）／`IN-001`（独立）
+- 社会人・独立リーグは網羅しない。「競合候補」などの記事に出てくる主な候補だけを手で追加する
 
 ### 3.5 出力スキーマ（初期案）
 
