@@ -10,6 +10,7 @@ ROWS = [
     ["UN-001", "鈴木 一郎", "", "大学", "ダミー大学", "", "", "https://example.com/un"],
     ["SH-001", "佐藤 次郎", "", "社会人", "ダミー製作所", "内野手", "", "https://example.com/sh"],
     ["IN-001", "田中 三郎", "", "独立", "ダミー独立球団", "外野手", "左投左打", "https://example.com/in"],
+    ["FM-001", "高橋 四郎", "", "二軍参加", "ダミー球団", "投手", "", "https://example.com/fm"],
 ]
 
 
@@ -67,4 +68,4 @@ def test_duplicate_player_same_team(tmp_path: Path) -> None:
 
 def test_same_name_different_team_is_ok(tmp_path: Path) -> None:
     rows = ROWS + [["HS-002", "山田 太郎", "", "高校", "別の高校", "", "", "https://example.com/x"]]
-    assert len(load_candidates(_write(tmp_path, rows))) == 5
+    assert len(load_candidates(_write(tmp_path, rows))) == len(ROWS) + 1
