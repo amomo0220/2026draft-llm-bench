@@ -1,6 +1,6 @@
 """予測を実行して predictions/ に保存し、実行ログを runs/runs.jsonl に記録する。
 
-現在の対応: 条件 A（情報なし）・B（候補者一覧をコンテキストに入れる）。C・D・H は未実装。
+現在の対応: 条件 A（情報なし）・B（候補者一覧をコンテキストに入れる）・C（各社 API の Web 検索）。D・H は未実装。
 
 出力は各社の JSON モードで受け取り、PredictionOutput（src/schema.py）で検証する。
 スキーマ違反のときは、エラー内容を添えて1回だけ出し直しを求める（attempts に記録）。
@@ -26,29 +26,41 @@ from pydantic import BaseModel, ValidationError
 
 from src.candidates import load_candidates
 from src.models import MODELS, ModelSpec, Provider
-from src.runners.base import RunnerResult
+from src.runners.base import MAX_SEARCHES, RunnerResult
 from src.schema import Prediction, PredictionOutput
 
 PROMPTS = Path("prompts")
-CONDITIONS = ("A", "B")
+CONDITIONS = ("A", "B", "C")
+WEB_SEARCH_CONDITIONS = ("C",)
 MAX_OUTPUT_TOKENS = 32_000
 MAX_ATTEMPTS = 2  # 初回＋スキーマ違反時の出し直し1回
 CHARS_PER_TOKEN = 1.0  # 日本語の見積もり用（実測で見直す）
 API_RETRY_DELAYS = (10.0, 30.0, 90.0)  # 混雑（503）やレート制限など、API の例外時に待つ秒数
 
-RunnerFn = Callable[[str, str, str, int], RunnerResult]
+RunnerFn = Callable[..., RunnerResult]  # (model_id, system, user, max_output_tokens, web_search=False)
+
+
+class RetriesExhausted(Exception):
+    """再試行を使い切った。最後の例外を cause に持つ。"""
+
+    def __init__(self, retries: int, last: Exception) -> None:
+        super().__init__(f"{type(last).__name__}: {last}")
+        self.retries = retries
 
 
 def call_with_retry(
-    runner: RunnerFn, args: tuple[str, str, str, int], sleep: Callable[[float], None] = time.sleep
+    runner: RunnerFn,
+    args: tuple[str, str, str, int],
+    sleep: Callable[[float], None] = time.sleep,
+    web_search: bool = False,
 ) -> tuple[RunnerResult, int]:
-    """API の例外は待ってから再試行する。(結果, 再試行回数) を返し、再試行し尽くしたら最後の例外を投げる。"""
+    """API の例外は待ってから再試行する。(結果, 再試行回数) を返し、再試行し尽くしたら RetriesExhausted を投げる。"""
     for retries, delay in enumerate((*API_RETRY_DELAYS, None)):
         try:
-            return runner(*args), retries
-        except Exception:
+            return runner(*args, web_search=web_search), retries
+        except Exception as e:
             if delay is None:
-                raise
+                raise RetriesExhausted(retries, e) from e
             sleep(delay)
     raise AssertionError("unreachable")
 
@@ -76,14 +88,21 @@ def build_prompt(condition: str, prompts_dir: Path = PROMPTS, candidates: Path =
     if condition == "B":
         context = (prompts_dir / "context_B.md").read_text(encoding="utf-8")
         user = context.replace("{{CANDIDATES}}", _candidates_table(candidates)) + "\n\n" + user
+    elif condition == "C":
+        user = (prompts_dir / "context_C.md").read_text(encoding="utf-8") + "\n\n" + user
     return Prompt(system=(prompts_dir / "system.md").read_text(encoding="utf-8"), user=user)
 
 
-def estimate_max_cost(spec: ModelSpec, prompt: Prompt, n: int) -> float:
+# 検索結果は入力トークンとして課金される。検索1回あたりの上乗せの目安（実測で見直す）
+SEARCH_RESULT_TOKENS = 5_000
+
+
+def estimate_max_cost(spec: ModelSpec, prompt: Prompt, n: int, web_search: bool = False) -> float:
     """見積もりの上限。出力は max_output_tokens を使い切り、全実行で出し直しが起きた場合。"""
     input_tokens = int((len(prompt.system) + len(prompt.user)) / CHARS_PER_TOKEN)
     per_attempt = spec.cost_usd(input_tokens + MAX_OUTPUT_TOKENS, MAX_OUTPUT_TOKENS)
-    return per_attempt * MAX_ATTEMPTS * n
+    search = spec.cost_usd(MAX_SEARCHES * SEARCH_RESULT_TOKENS, 0, MAX_SEARCHES) if web_search else 0.0
+    return (per_attempt * MAX_ATTEMPTS + search) * n
 
 
 _FENCE = re.compile(r"^```(?:json)?\s*|\s*```$")
@@ -133,11 +152,15 @@ def run_once(
     t0 = time.monotonic()
     totals = {"in": 0, "out": 0, "reasoning": None, "tools": 0, "retries": 0}
     user, attempts, status, error, path = prompt.user, 0, "invalid_output", None, None
+    search = condition in WEB_SEARCH_CONDITIONS
 
     try:
         while attempts < MAX_ATTEMPTS:
             attempts += 1
-            res, retries = call_with_retry(runner, (spec.model_id, prompt.system, user, MAX_OUTPUT_TOKENS), sleep)
+            # 出し直しは形式の修正だけなので検索させない
+            res, retries = call_with_retry(
+                runner, (spec.model_id, prompt.system, user, MAX_OUTPUT_TOKENS), sleep, web_search=search and attempts == 1
+            )
             totals["retries"] += retries
             totals["in"] += res.input_tokens
             totals["out"] += res.output_tokens
@@ -159,7 +182,10 @@ def run_once(
             out.write_text(pred.model_dump_json(indent=1), encoding="utf-8")
             status, error, path = "ok", None, str(out)
             break
-    except Exception as e:  # API エラーも記録して次の実行へ進む
+    except RetriesExhausted as e:  # API エラーも記録して次の実行へ進む
+        totals["retries"] += e.retries
+        status, error = "error", str(e)[:2000]
+    except Exception as e:
         status, error = "error", f"{type(e).__name__}: {str(e)[:2000]}"
 
     return RunLog(
@@ -175,7 +201,7 @@ def run_once(
         input_tokens=totals["in"],
         output_tokens=totals["out"],
         reasoning_tokens=totals["reasoning"],
-        cost_usd=round(spec.cost_usd(totals["in"], totals["out"]), 6),
+        cost_usd=round(spec.cost_usd(totals["in"], totals["out"], totals["tools"] if search else 0), 6),
         tool_calls=totals["tools"],
         api_retries=totals["retries"],
         status=status,
@@ -212,7 +238,7 @@ def main(argv: list[str] | None = None, runner: RunnerFn | None = None) -> int:
 
     spec = MODELS[args.model]
     prompt = build_prompt(args.condition)
-    estimate = estimate_max_cost(spec, prompt, args.n)
+    estimate = estimate_max_cost(spec, prompt, args.n, web_search=args.condition in WEB_SEARCH_CONDITIONS)
     print(f"{spec.model_id} 条件{args.condition} × {args.n}回: 見積もり上限 ${estimate:.2f}（prompt {prompt.sha256[:12]}）")
     if args.dry_run:
         return 0
