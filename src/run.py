@@ -22,7 +22,7 @@ import sys
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime, timedelta, timezone
 from pathlib import Path
 
 from pydantic import BaseModel, ValidationError
@@ -71,6 +71,16 @@ def call_with_retry(
 
 
 NOTES_PLACEHOLDER = "{{NOTES}}"
+TODAY_PLACEHOLDER = "{{TODAY}}"
+JST = timezone(timedelta(hours=9), "JST")
+
+
+def today_jst() -> date:
+    return datetime.now(JST).date()
+
+
+def format_date(d: date) -> str:
+    return f"{d.year}年{d.month}月{d.day}日"
 DRAFT_PLACEHOLDER = "{{DRAFT}}"
 
 
@@ -116,12 +126,22 @@ def _candidates_table(path: Path) -> str:
     return "\n".join(f"{c.category.value},{c.name},{c.team},{c.position or ''}" for c in rows)
 
 
-def build_prompt(condition: str, prompts_dir: Path = PROMPTS, candidates: Path = Path("data/candidates.csv")) -> Prompt:
+def build_prompt(
+    condition: str,
+    prompts_dir: Path = PROMPTS,
+    candidates: Path = Path("data/candidates.csv"),
+    today: date | None = None,
+) -> Prompt:
+    """条件のプロンプトを組み立てる。{{TODAY}} は実行日（日本時間）で置き換える。
+
+    日付が変わるとプロンプトのハッシュも変わる（ハッシュは runs.jsonl に記録される）。
+    """
     if condition not in CONDITIONS:
         raise ValueError(f"未対応の条件です: {condition}（対応: {', '.join(CONDITIONS)}）")
+    today_text = format_date(today or today_jst())
 
     def read(name: str) -> str:
-        return (prompts_dir / name).read_text(encoding="utf-8")
+        return (prompts_dir / name).read_text(encoding="utf-8").replace(TODAY_PLACEHOLDER, today_text)
 
     schema = json.dumps(PredictionOutput.model_json_schema(), ensure_ascii=False, indent=1)
     task = read("task.md").replace("{{SCHEMA}}", schema)
@@ -366,7 +386,10 @@ def main(argv: list[str] | None = None, runner: RunnerFn | None = None) -> int:
     spec = MODELS[args.model]
     prompt = build_prompt(args.condition)
     estimate = estimate_max_cost(spec, prompt, args.n)
-    print(f"{spec.model_id} 条件{args.condition} × {args.n}回: 見積もり上限 ${estimate:.2f}（prompt {prompt.sha256[:12]}）")
+    print(
+        f"{spec.model_id} 条件{args.condition} × {args.n}回: 見積もり上限 ${estimate:.2f}"
+        f"（実行日 {format_date(today_jst())}、prompt {prompt.sha256[:12]}）"
+    )
     if args.dry_run:
         return 0
 

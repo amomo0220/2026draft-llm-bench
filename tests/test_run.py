@@ -1,4 +1,5 @@
 import json
+from datetime import date, datetime
 from pathlib import Path
 
 import pytest
@@ -274,3 +275,24 @@ def test_run_once_d_invalid_verify_output_is_not_saved(tmp_path: Path) -> None:
 def test_run_once_d_requires_tools(tmp_path: Path) -> None:
     with pytest.raises(ValueError):
         run_once(SPEC, "D", 1, build_prompt("D"), _tool_runner(), tmp_path)
+
+
+# --- 実行日 ---
+
+
+@pytest.mark.parametrize("condition", ["A", "B", "C", "D"])
+def test_build_prompt_fills_today(condition: str) -> None:
+    p = build_prompt(condition, today=date(2026, 10, 18))
+    texts = [p.system, p.user] + [t for s in (p.research, p.verify) if s for t in (s.system, s.user)]
+    assert all("{{TODAY}}" not in t for t in texts)
+    assert "今日は 2026年10月18日 です。" in (p.research.user if p.research else p.user)
+
+
+def test_prompt_hash_changes_with_date() -> None:
+    assert build_prompt("C", today=date(2026, 10, 18)).sha256 != build_prompt("C", today=date(2026, 10, 19)).sha256
+
+
+def test_today_jst_is_jst() -> None:
+    from src.run import JST, today_jst
+
+    assert today_jst() == datetime.now(JST).date()
