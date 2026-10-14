@@ -72,6 +72,9 @@ uv sync                                  # 依存関係のインストール
 uv run pytest                            # テスト
 uv run python -m src.run --condition B --model <model-id> --n 3   # 実験の実行
 uv run python -m src.scorer --actual data/actual/2026.json        # 採点
+uv run python -m src.actual data/actual/2026.json  # 実際の結果の入力チェック
+uv run python -m src.build_candidates    # 候補者マスタの生成（data/raw/ の公式一覧から）
+uv run python -m src.candidates          # 候補者マスタの検証
 uv run python -m src.draft_db_mcp        # MCP サーバー起動
 ```
 
