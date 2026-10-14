@@ -23,6 +23,7 @@ class Category(StrEnum):
     UNIVERSITY = "大学"
     SHAKAIJIN = "社会人"
     INDEPENDENT = "独立"
+    FARM = "二軍参加"  # NPB ファームのみに参加する球団（オイシックス、ハヤテ）
 
 
 # player_id の接頭辞（例: HS-001）
@@ -31,6 +32,7 @@ ID_PREFIX: dict[Category, str] = {
     Category.UNIVERSITY: "UN",
     Category.SHAKAIJIN: "SH",
     Category.INDEPENDENT: "IN",
+    Category.FARM: "FM",
 }
 
 
@@ -45,7 +47,7 @@ class Candidate(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    player_id: Annotated[str, Field(pattern=r"^(HS|UN|SH|IN)-\d{3}$")]
+    player_id: Annotated[str, Field(pattern=r"^(HS|UN|SH|IN|FM)-\d{3}$")]
     name: NonEmptyStr
     kana: str | None = None
     category: Category
