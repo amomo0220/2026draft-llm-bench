@@ -37,6 +37,15 @@ class TeamCode(StrEnum):
     M = "M"  # 千葉ロッテマリーンズ
 
 
+class Position(StrEnum):
+    """NPB のドラフト結果と同じ4区分。"""
+
+    PITCHER = "投手"
+    CATCHER = "捕手"
+    INFIELDER = "内野手"
+    OUTFIELDER = "外野手"
+
+
 class _Strict(BaseModel):
     # 未知のフィールドは弾く（LLM が余計なキーを返した場合も検出する）
     model_config = ConfigDict(extra="forbid")
@@ -47,8 +56,15 @@ def _name_key(player_name: str) -> str:
     return "".join(player_name.split())
 
 
-class PlayerProb(_Strict):
+class _PlayerRef(_Strict):
+    """予測に出てくる選手。マスタとの突合は名前で行い、所属・ポジションは誤りの判定に使う。"""
+
     player_name: NonEmptyStr
+    affiliation: NonEmptyStr  # 所属（高校・大学・企業・独立球団など）
+    position: Position
+
+
+class PlayerProb(_PlayerRef):
     prob: float = Field(ge=0.0, le=1.0, allow_inf_nan=False)
 
 
@@ -67,18 +83,16 @@ class FirstRoundBid(_Strict):
         return self
 
 
-class ContestPrediction(_Strict):
+class ContestPrediction(_PlayerRef):
     """競合予測。PLAN.md に定義がないため最小限の初期案。"""
 
-    player_name: NonEmptyStr
     num_teams: int = Field(ge=2, le=NUM_TEAMS)  # 競合する球団数
 
 
-class LottePick(_Strict):
+class LottePick(_PlayerRef):
     """ロッテの指名予測。1位は「入札する選手」を指す（抽選の結果や外れ1位ではない）。"""
 
     round: int = Field(ge=1, le=LOTTE_ROUNDS)
-    player_name: NonEmptyStr
     reason: str
     sources: list[HttpUrl] = Field(default_factory=list)  # 条件 A/B では空になりうる
 
