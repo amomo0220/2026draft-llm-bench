@@ -81,7 +81,7 @@
   - API の実行では、MCP サーバーと同じ関数（`src/draft_db_mcp/tools.py`）を各社の関数呼び出し（function calling）として渡す。通信方式が違うだけで、ツールの名前・説明・引数・中身は MCP サーバー（条件 H 用）と同じ
   - 1つの段階でのツール呼び出しの往復は最大20回。Gemini は Google 検索と関数呼び出しの併用に `tool_config.include_server_side_tool_invocations` が必要
 - 条件 C の検索: Anthropic は `web_search_20260209`（1回の呼び出しで最大10回）、OpenAI は `web_search`（最大10回）、Gemini は Google 検索のグラウンディング（回数の上限は設定できない）。整形の呼び出しは検索なしなので、条件 A・B と同じく各社の JSON モードを使う。スキーマ違反の出し直しは整形だけをやり直す
-- 検索の料金（1回あたり）は `src/models.py`。2026-10-14 に Anthropic（$0.01）と Google（$0.014、検索語1つあたり）を公式の料金ページで確認した。OpenAI は公式ページをクラウド環境から開けず未確認（$0.025 を置いている）。Gemini の検索は月5,000件まで無料だが、記録するコストは無料枠を考えない定価で計算する
+- 検索の料金（1回あたり）は `src/models.py`。2026-10-14 に Anthropic（$0.01）と Google（$0.014、検索語1つあたり）を公式の料金ページで確認した。OpenAI の検索（$0.01）は、ユーザーが保存した公式ページの HTML で確認した。gpt-5.6-terra のトークン単価（$2 / $12）はそのページに載っておらず未確認。Gemini の検索は月5,000件まで無料だが、記録するコストは無料枠を考えない定価で計算する
 - Anthropic の API キーは `BENCH_ANTHROPIC_API_KEY` から読む（クラウド環境では `ANTHROPIC_API_KEY` が Claude Code 自身の認証用に予約されているため）
 #### 試行の結果（2026-10-14、各1回。`predictions/` には保存していない）
 

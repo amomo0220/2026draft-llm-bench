@@ -9,8 +9,9 @@
   2026-12-31 まで $0.75 / $3.75。Google 検索のグラウンディングは検索語1つごとに $14 / 1,000（Gemini 3 以降の合計で
   月5,000件まで無料。無料枠は見積もりに入れない）。Gemini API（ai.google.dev）の料金ページはこの環境から開けず、
   検索結果の抜粋で同じ料金であることだけ確かめた
-- OpenAI: 公式の料金ページをこの環境から開けず、未確認。Web 検索の料金は二次情報で食い違う（$10 か $25 / 1,000回）ため、
-  高いほうを置いている
+- OpenAI: 公式の料金ページ（https://platform.openai.com/docs/pricing）をユーザーが保存した HTML で確認。
+  Web 検索は全モデル $10 / 1,000回（検索結果のトークンはモデルの単価で別に課金）。gpt-5.6-terra のトークン単価は
+  このページに載っておらず未確認（$2 / $12 は二次情報）
 """
 
 from dataclasses import dataclass
@@ -40,7 +41,7 @@ MODELS: dict[str, ModelSpec] = {
     m.model_id: m
     for m in [
         ModelSpec(Provider.ANTHROPIC, "claude-sonnet-5-5", 2.00, 10.00, 0.01),
-        ModelSpec(Provider.OPENAI, "gpt-5.6-terra", 2.00, 12.00, 0.025),  # 要確認（モジュールの説明）
+        ModelSpec(Provider.OPENAI, "gpt-5.6-terra", 2.00, 12.00, 0.01),  # トークン単価は要確認（モジュールの説明）
         ModelSpec(Provider.GEMINI, "gemini-3.8-flash", 0.75, 3.75, 0.014),  # トークン単価は2026年末までの導入価格
     ]
 }
