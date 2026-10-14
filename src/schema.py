@@ -84,16 +84,15 @@ class LottePick(_Strict):
     sources: list[HttpUrl] = Field(default_factory=list)  # 条件 A/B では空になりうる
 
 
-class Prediction(_Strict):
-    run_id: NonEmptyStr
-    model_id: NonEmptyStr
-    condition: NonEmptyStr  # A / B / C / D / H-claude / ...
+class PredictionOutput(_Strict):
+    """LLM が出力する部分。LLM にはこのスキーマだけを渡す。"""
+
     first_round: list[FirstRoundBid]  # 12件
     contested: list[ContestPrediction] = Field(default_factory=list)  # 最小構成では対象外
     lotte: list[LottePick]  # 5件
 
     @model_validator(mode="after")
-    def _check_first_round(self) -> "Prediction":
+    def _check_first_round(self) -> "PredictionOutput":
         teams = [b.team for b in self.first_round]
         if len(teams) != NUM_TEAMS or set(teams) != set(TeamCode):
             missing = sorted(set(TeamCode) - set(teams))
@@ -105,7 +104,7 @@ class Prediction(_Strict):
         return self
 
     @model_validator(mode="after")
-    def _check_lotte(self) -> "Prediction":
+    def _check_lotte(self) -> "PredictionOutput":
         rounds = sorted(p.round for p in self.lotte)
         if rounds != list(range(1, LOTTE_ROUNDS + 1)):
             raise ValueError(f"lotte は1〜{LOTTE_ROUNDS}位を1件ずつ含む必要があります（round={rounds}）")
@@ -113,3 +112,12 @@ class Prediction(_Strict):
         if len(keys) != len(set(keys)):
             raise ValueError("lotte で同じ選手が複数の順位に指名されています")
         return self
+
+
+class Prediction(_Strict):
+    """predictions/ に保存する1回分の予測。メタデータはコードが付与し、LLM には書かせない。"""
+
+    run_id: NonEmptyStr
+    model_id: NonEmptyStr
+    condition: NonEmptyStr  # A / B / C / D / H-claude / ...
+    output: PredictionOutput

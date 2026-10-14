@@ -4,15 +4,12 @@ from typing import Any
 import pytest
 from pydantic import ValidationError
 
-from src.schema import PROB_SUM_TOLERANCE, FirstRoundBid, Prediction, TeamCode
+from src.schema import PROB_SUM_TOLERANCE, FirstRoundBid, Prediction, PredictionOutput, TeamCode
 
 
 def _valid_payload() -> dict[str, Any]:
-    """検証を通る最小の予測（ダミーの選手名）。"""
+    """検証を通る最小の LLM 出力（ダミーの選手名）。"""
     return {
-        "run_id": "run-0001",
-        "model_id": "dummy-model",
-        "condition": "B",
         "first_round": [
             {
                 "team": team.value,
@@ -39,22 +36,22 @@ def _valid_payload() -> dict[str, Any]:
 
 def _expect_invalid(payload: dict[str, Any]) -> None:
     with pytest.raises(ValidationError):
-        Prediction.model_validate(payload)
+        PredictionOutput.model_validate(payload)
 
 
 # --- 正常系 ---
 
 
 def test_valid_prediction() -> None:
-    pred = Prediction.model_validate(_valid_payload())
+    pred = PredictionOutput.model_validate(_valid_payload())
     assert len(pred.first_round) == 12
     assert {b.team for b in pred.first_round} == set(TeamCode)
     assert [p.round for p in pred.lotte] == [1, 2, 3, 4, 5]
 
 
 def test_json_roundtrip() -> None:
-    pred = Prediction.model_validate(_valid_payload())
-    assert Prediction.model_validate_json(pred.model_dump_json()) == pred
+    pred = PredictionOutput.model_validate(_valid_payload())
+    assert PredictionOutput.model_validate_json(pred.model_dump_json()) == pred
 
 
 def test_contested_and_sources_are_optional() -> None:
@@ -62,7 +59,7 @@ def test_contested_and_sources_are_optional() -> None:
     del payload["contested"]
     for pick in payload["lotte"]:
         del pick["sources"]
-    pred = Prediction.model_validate(payload)
+    pred = PredictionOutput.model_validate(payload)
     assert pred.contested == []
     assert all(p.sources == [] for p in pred.lotte)
 
@@ -70,7 +67,7 @@ def test_contested_and_sources_are_optional() -> None:
 def test_lotte_order_does_not_matter() -> None:
     payload = _valid_payload()
     payload["lotte"].reverse()
-    Prediction.model_validate(payload)
+    PredictionOutput.model_validate(payload)
 
 
 def test_prob_sum_within_tolerance() -> None:
@@ -126,14 +123,14 @@ def test_missing_team() -> None:
     payload = _valid_payload()
     payload["first_round"].pop()
     with pytest.raises(ValidationError, match="12球団"):
-        Prediction.model_validate(payload)
+        PredictionOutput.model_validate(payload)
 
 
 def test_duplicate_team() -> None:
     payload = _valid_payload()
     payload["first_round"][-1] = copy.deepcopy(payload["first_round"][0])
     with pytest.raises(ValidationError, match="12球団"):
-        Prediction.model_validate(payload)
+        PredictionOutput.model_validate(payload)
 
 
 def test_extra_team() -> None:
@@ -164,14 +161,14 @@ def test_lotte_duplicate_round() -> None:
     payload = _valid_payload()
     payload["lotte"][1]["round"] = 1
     with pytest.raises(ValidationError, match="1〜5位"):
-        Prediction.model_validate(payload)
+        PredictionOutput.model_validate(payload)
 
 
 def test_lotte_duplicate_player() -> None:
     payload = _valid_payload()
     payload["lotte"][1]["player_name"] = payload["lotte"][0]["player_name"]
     with pytest.raises(ValidationError, match="同じ選手"):
-        Prediction.model_validate(payload)
+        PredictionOutput.model_validate(payload)
 
 
 def test_lotte_invalid_source_url() -> None:
@@ -189,11 +186,36 @@ def test_extra_field_rejected() -> None:
     _expect_invalid(payload)
 
 
+def _valid_prediction() -> dict[str, Any]:
+    return {"run_id": "run-0001", "model_id": "dummy-model", "condition": "B", "output": _valid_payload()}
+
+
+def test_prediction_wraps_output() -> None:
+    pred = Prediction.model_validate(_valid_prediction())
+    assert pred.condition == "B"
+    assert len(pred.output.first_round) == 12
+
+
 @pytest.mark.parametrize("field", ["run_id", "model_id", "condition"])
 def test_blank_metadata_rejected(field: str) -> None:
-    payload = _valid_payload()
+    payload = _valid_prediction()
     payload[field] = "  "
+    with pytest.raises(ValidationError):
+        Prediction.model_validate(payload)
+
+
+@pytest.mark.parametrize("field", ["run_id", "model_id", "condition"])
+def test_llm_output_cannot_contain_metadata(field: str) -> None:
+    payload = _valid_payload()
+    payload[field] = "x"
     _expect_invalid(payload)
+
+
+def test_invalid_output_rejected_in_prediction() -> None:
+    payload = _valid_prediction()
+    payload["output"]["lotte"].pop()
+    with pytest.raises(ValidationError):
+        Prediction.model_validate(payload)
 
 
 def test_empty_player_name_rejected() -> None:

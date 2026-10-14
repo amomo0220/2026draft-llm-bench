@@ -88,14 +88,19 @@ class LottePick(BaseModel):
     reason: str
     sources: list[HttpUrl]
 
-class Prediction(BaseModel):
-    run_id: str
+class PredictionOutput(BaseModel):     # LLM が出力する部分（LLM にはこれだけを渡す）
+    first_round: list[FirstRoundBid]    # 12件
+    contested: list[ContestPrediction]  # 競合予測（最小構成では空でよい）
+    lotte: list[LottePick]              # 5件
+
+class Prediction(BaseModel):           # predictions/ に保存する単位
+    run_id: str                         # 以下3つはコードが付与する
     model_id: str
     condition: str                      # A / B / C / D / H-claude / ...
-    first_round: list[FirstRoundBid]    # 12件
-    contested: list[ContestPrediction]  # 競合予測
-    lotte: list[LottePick]              # 5件
+    output: PredictionOutput
 ```
+
+実装は `src/schema.py`。メタデータ（run_id・model_id・condition）は LLM に書かせず、実行スクリプトが付与する。
 
 ### 3.6 評価指標
 
