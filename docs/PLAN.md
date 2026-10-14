@@ -55,7 +55,18 @@
 | D エージェント | draft-db MCP＋検索＋自己検証 | 自律的な収集・検証の効果 |
 | H ハーネス比較 | Claude Code / Codex / Gemini CLI に同じ draft-db MCP を渡す | モデルとハーネスの切り分け |
 
-モデルは OpenAI・Anthropic・Google の各1モデル（実験開始時点の最新版、モデルIDを記録）。
+モデルは OpenAI・Anthropic・Google の各1モデル。**2026-10-14 に固定**: 各社の最新の中位モデルで格をそろえる（料金も近い帯）。
+
+| 提供元 | モデルID | 料金（入力/出力、100万トークンあたり） |
+| --- | --- | --- |
+| Anthropic | `claude-sonnet-5-5` | $2 / $10 |
+| OpenAI | `gpt-5.6-terra` | $2 / $12 |
+| Google | `gemini-3.8-flash` | $0.75 / $3.75（2026年末までの導入価格） |
+
+- 選定理由: 記事の読者が検索する最新モデル名にする／1社だけ上位モデルにすると比較が不公平に見える／ハーネス比較（H）でも同じ `claude-sonnet-5-5` を使える
+- 推論（thinking・reasoning）の設定は各社の既定のまま。出力は各社の JSON モードで受け取り、`PredictionOutput` で検証する。スキーマ違反は1回だけ出し直しを求める
+- 実行は `src/run.py`（現在は条件 A・B のみ）。モデルと料金の定義は `src/models.py`
+- Anthropic の API キーは `BENCH_ANTHROPIC_API_KEY` から読む（クラウド環境では `ANTHROPIC_API_KEY` が Claude Code 自身の認証用に予約されているため）
 基本は **3モデル × 条件A〜D × 各3回 ＝ 36回** ＋ ハーネス比較。
 
 ### 3.3 ベースライン
