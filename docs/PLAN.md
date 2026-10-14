@@ -42,7 +42,7 @@
 
 1. **12球団の1位入札**：各球団が入札する選手（確率付き）
 2. **競合予測**：競合する選手と、競合する球団数
-3. **千葉ロッテマリーンズの1〜5位指名**
+3. **千葉ロッテマリーンズの1〜5位指名**（1位は「入札する選手」。抽選の結果や外れ1位は採点対象外で、`data/actual/` に別途記録する）
 4. （提言・参考）ロッテが「指名すべき」1〜5位とその理由 ※採点対象外、主観評価
 
 ### 3.2 情報条件
@@ -78,13 +78,11 @@ class FirstRoundBid(BaseModel):
 
 class PlayerProb(BaseModel):
     player_name: str
-    player_id: str | None               # マスタと突合できた場合
     prob: float
 
 class LottePick(BaseModel):
-    round: int                          # 1〜5
+    round: int                          # 1〜5（1位 = 入札する選手）
     player_name: str
-    player_id: str | None
     reason: str
     sources: list[HttpUrl]
 
@@ -101,6 +99,8 @@ class Prediction(BaseModel):           # predictions/ に保存する単位
 ```
 
 実装は `src/schema.py`。メタデータ（run_id・model_id・condition）は LLM に書かせず、実行スクリプトが付与する。
+
+LLM には **選手名だけ** を出力させる（`player_id` は出力させない）。候補者マスタとの突合は採点側のコードで行い、結果は予測ファイルに書き戻さない。突合できない名前はハルシネーション候補として扱う。これにより、事前登録後でも突合ロジック（表記ゆれの吸収など）を修正できる。
 
 ### 3.6 評価指標
 

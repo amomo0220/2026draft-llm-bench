@@ -14,18 +14,17 @@ def _valid_payload() -> dict[str, Any]:
             {
                 "team": team.value,
                 "candidates": [
-                    {"player_name": f"選手{team.value}A", "player_id": f"P-{team.value}-A", "prob": 0.6},
-                    {"player_name": f"選手{team.value}B", "player_id": None, "prob": 0.4},
+                    {"player_name": f"選手{team.value}A", "prob": 0.6},
+                    {"player_name": f"選手{team.value}B", "prob": 0.4},
                 ],
             }
             for team in TeamCode
         ],
-        "contested": [{"player_name": "選手GA", "player_id": "P-G-A", "num_teams": 3}],
+        "contested": [{"player_name": "選手GA", "num_teams": 3}],
         "lotte": [
             {
                 "round": r,
                 "player_name": f"ロッテ{r}位",
-                "player_id": None,
                 "reason": "ダミー",
                 "sources": ["https://example.com/a"],
             }
@@ -178,6 +177,26 @@ def test_lotte_invalid_source_url() -> None:
 
 
 # --- その他の不正出力 ---
+
+
+def test_player_id_rejected_in_llm_output() -> None:
+    """player_id はコードで突合するため、LLM が出力したら拒否する。"""
+    for mutate in (
+        lambda p: p["first_round"][0]["candidates"][0].update(player_id="P-1"),
+        lambda p: p["lotte"][0].update(player_id="P-1"),
+        lambda p: p["contested"][0].update(player_id="P-1"),
+    ):
+        payload = _valid_payload()
+        mutate(payload)
+        _expect_invalid(payload)
+
+
+def test_fullwidth_space_duplicate_in_lotte() -> None:
+    payload = _valid_payload()
+    payload["lotte"][0]["player_name"] = "山田\u3000太郎"
+    payload["lotte"][1]["player_name"] = "山田太郎"
+    with pytest.raises(ValidationError, match="同じ選手"):
+        PredictionOutput.model_validate(payload)
 
 
 def test_extra_field_rejected() -> None:

@@ -1,6 +1,8 @@
 """予測出力の Pydantic スキーマ（docs/PLAN.md 3.5）。
 
 LLM の出力は必ずこのスキーマで検証してから保存・採点する。
+LLM には選手名だけを出力させ、候補者マスタ（player_id）との突合は採点側のコードで行う。
+突合結果は予測ファイルに書き戻さない（事前登録後も突合ロジックを直せるようにするため）。
 スキーマを変更するときは tests/test_schema.py も同時に更新すること。
 """
 
@@ -40,16 +42,13 @@ class _Strict(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
-def _player_key(player_name: str, player_id: str | None) -> str:
-    """同一選手判定用のキー。マスタ ID があれば優先し、なければ空白を除いた名前を使う。"""
-    if player_id:
-        return f"id:{player_id}"
-    return "name:" + "".join(player_name.split())
+def _name_key(player_name: str) -> str:
+    """同一選手判定用のキー。空白（全角を含む）を除いた名前。"""
+    return "".join(player_name.split())
 
 
 class PlayerProb(_Strict):
     player_name: NonEmptyStr
-    player_id: str | None = None  # マスタと突合できた場合
     prob: float = Field(ge=0.0, le=1.0, allow_inf_nan=False)
 
 
@@ -62,7 +61,7 @@ class FirstRoundBid(_Strict):
         total = sum(c.prob for c in self.candidates)
         if abs(total - 1.0) > PROB_SUM_TOLERANCE:
             raise ValueError(f"{self.team}: 確率の合計が 1.0 ではありません（{total:.4f}）")
-        keys = [_player_key(c.player_name, c.player_id) for c in self.candidates]
+        keys = [_name_key(c.player_name) for c in self.candidates]
         if len(keys) != len(set(keys)):
             raise ValueError(f"{self.team}: 同じ選手が重複しています")
         return self
@@ -72,14 +71,14 @@ class ContestPrediction(_Strict):
     """競合予測。PLAN.md に定義がないため最小限の初期案。"""
 
     player_name: NonEmptyStr
-    player_id: str | None = None
     num_teams: int = Field(ge=2, le=NUM_TEAMS)  # 競合する球団数
 
 
 class LottePick(_Strict):
+    """ロッテの指名予測。1位は「入札する選手」を指す（抽選の結果や外れ1位ではない）。"""
+
     round: int = Field(ge=1, le=LOTTE_ROUNDS)
     player_name: NonEmptyStr
-    player_id: str | None = None
     reason: str
     sources: list[HttpUrl] = Field(default_factory=list)  # 条件 A/B では空になりうる
 
@@ -108,7 +107,7 @@ class PredictionOutput(_Strict):
         rounds = sorted(p.round for p in self.lotte)
         if rounds != list(range(1, LOTTE_ROUNDS + 1)):
             raise ValueError(f"lotte は1〜{LOTTE_ROUNDS}位を1件ずつ含む必要があります（round={rounds}）")
-        keys = [_player_key(p.player_name, p.player_id) for p in self.lotte]
+        keys = [_name_key(p.player_name) for p in self.lotte]
         if len(keys) != len(set(keys)):
             raise ValueError("lotte で同じ選手が複数の順位に指名されています")
         return self
