@@ -1,0 +1,17 @@
+[project]
+name = "draft-llm-bench"
+version = "0.1.0"
+description = "2026プロ野球ドラフト × LLM／AIエージェント ライブ予測ベンチマーク"
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2.14.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
