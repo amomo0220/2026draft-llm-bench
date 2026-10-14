@@ -78,17 +78,28 @@ def load_candidates(path: Path) -> list[Candidate]:
             except ValueError as e:
                 errors.append(f"{path}:{lineno}: {e}")
 
+    errors += check_uniqueness(rows)
+    if errors:
+        raise ValueError("\n".join(errors))
+    return rows
+
+
+def name_key(name: str) -> str:
+    """同一選手判定用のキー。空白（全角を含む）を除いた名前。"""
+    return "".join(name.split())
+
+
+def check_uniqueness(rows: list[Candidate]) -> list[str]:
+    """ファイル全体の制約（ID と選手の重複）を検証し、エラーメッセージのリストを返す。"""
+    errors: list[str] = []
     for pid, n in Counter(r.player_id for r in rows).items():
         if n > 1:
             errors.append(f"player_id が重複しています: {pid}")
     # 同姓同名はありうるため、名前と所属の組で重複を見る
-    for (name, team), n in Counter(("".join(r.name.split()), r.team) for r in rows).items():
+    for (name, team), n in Counter((name_key(r.name), r.team) for r in rows).items():
         if n > 1:
             errors.append(f"同じ選手が重複しています: {name}（{team}）")
-
-    if errors:
-        raise ValueError("\n".join(errors))
-    return rows
+    return errors
 
 
 def main(argv: list[str]) -> int:
