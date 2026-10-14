@@ -14,17 +14,19 @@ def _valid_payload() -> dict[str, Any]:
             {
                 "team": team.value,
                 "candidates": [
-                    {"player_name": f"選手{team.value}A", "prob": 0.6},
-                    {"player_name": f"選手{team.value}B", "prob": 0.4},
+                    {"player_name": f"選手{team.value}A", "affiliation": "ダミー所属", "position": "投手", "prob": 0.6},
+                    {"player_name": f"選手{team.value}B", "affiliation": "ダミー所属", "position": "投手", "prob": 0.4},
                 ],
             }
             for team in TeamCode
         ],
-        "contested": [{"player_name": "選手GA", "num_teams": 3}],
+        "contested": [{"player_name": "選手GA", "affiliation": "ダミー所属", "position": "投手", "num_teams": 3}],
         "lotte": [
             {
                 "round": r,
                 "player_name": f"ロッテ{r}位",
+                "affiliation": "ダミー所属",
+                "position": "外野手",
                 "reason": "ダミー",
                 "sources": ["https://example.com/a"],
             }
@@ -72,7 +74,7 @@ def test_lotte_order_does_not_matter() -> None:
 def test_prob_sum_within_tolerance() -> None:
     probs = [0.333, 0.333, 0.333]  # 合計 0.999
     FirstRoundBid.model_validate(
-        {"team": "M", "candidates": [{"player_name": f"x{i}", "prob": p} for i, p in enumerate(probs)]}
+        {"team": "M", "candidates": [{"player_name": f"x{i}", "affiliation": "ダミー所属", "position": "投手", "prob": p} for i, p in enumerate(probs)]}
     )
 
 
@@ -83,14 +85,14 @@ def test_prob_sum_within_tolerance() -> None:
 def test_prob_sum_must_be_one(probs: list[float]) -> None:
     with pytest.raises(ValidationError, match="確率の合計"):
         FirstRoundBid.model_validate(
-            {"team": "G", "candidates": [{"player_name": f"x{i}", "prob": p} for i, p in enumerate(probs)]}
+            {"team": "G", "candidates": [{"player_name": f"x{i}", "affiliation": "ダミー所属", "position": "投手", "prob": p} for i, p in enumerate(probs)]}
         )
 
 
 @pytest.mark.parametrize("bad_prob", [-0.1, 1.5, float("nan"), float("inf")])
 def test_prob_out_of_range(bad_prob: float) -> None:
     payload = _valid_payload()
-    payload["first_round"][0]["candidates"] = [{"player_name": "x", "prob": bad_prob}]
+    payload["first_round"][0]["candidates"] = [{"player_name": "x", "affiliation": "ダミー所属", "position": "投手", "prob": bad_prob}]
     _expect_invalid(payload)
 
 
@@ -103,8 +105,8 @@ def test_empty_candidates() -> None:
 def test_duplicate_candidate_in_team() -> None:
     payload = _valid_payload()
     payload["first_round"][0]["candidates"] = [
-        {"player_name": "山田 太郎", "prob": 0.5},
-        {"player_name": "山田太郎", "prob": 0.5},
+        {"player_name": "山田 太郎", "affiliation": "ダミー所属", "position": "投手", "prob": 0.5},
+        {"player_name": "山田太郎", "affiliation": "ダミー所属", "position": "投手", "prob": 0.5},
     ]
     _expect_invalid(payload)
 
@@ -247,4 +249,38 @@ def test_empty_player_name_rejected() -> None:
 def test_contest_num_teams_range(num_teams: int) -> None:
     payload = _valid_payload()
     payload["contested"][0]["num_teams"] = num_teams
+    _expect_invalid(payload)
+
+
+# --- 所属・ポジション ---
+
+
+@pytest.mark.parametrize("position", ["遊撃手", "投手、内野手", "", "pitcher"])
+def test_unknown_position_rejected(position: str) -> None:
+    payload = _valid_payload()
+    payload["lotte"][0]["position"] = position
+    _expect_invalid(payload)
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        ("first_round", 0, "candidates", 0),
+        ("contested", 0),
+        ("lotte", 0),
+    ],
+)
+@pytest.mark.parametrize("field", ["affiliation", "position"])
+def test_affiliation_and_position_required(path: tuple[str | int, ...], field: str) -> None:
+    payload = _valid_payload()
+    target: Any = payload
+    for key in path:
+        target = target[key]
+    del target[field]
+    _expect_invalid(payload)
+
+
+def test_blank_affiliation_rejected() -> None:
+    payload = _valid_payload()
+    payload["first_round"][0]["candidates"][0]["affiliation"] = " "
     _expect_invalid(payload)
