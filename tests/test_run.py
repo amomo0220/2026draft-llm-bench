@@ -1,10 +1,11 @@
 import json
+from datetime import date, datetime
 from pathlib import Path
 
 import pytest
 
 from src.models import MODELS
-from src.run import NOTES_PLACEHOLDER, Prompt, RunLog, build_prompt, estimate_max_cost, extract_json, main, run_once
+from src.run import DRAFT_PLACEHOLDER, NOTES_PLACEHOLDER, Prompt, RunLog, build_prompt, estimate_max_cost, extract_json, main, run_once
 from src.runners.base import RunnerResult
 from src.schema import Prediction
 from tests.dummy_draft import prediction_payload
@@ -49,7 +50,7 @@ def test_build_prompt_a_has_no_candidates() -> None:
 
 def test_build_prompt_rejects_unknown_condition() -> None:
     with pytest.raises(ValueError):
-        build_prompt("D")
+        build_prompt("H")
 
 
 def test_estimate_scales_with_n() -> None:
@@ -199,3 +200,99 @@ def test_run_once_b_never_searches(tmp_path: Path) -> None:
     runner = _runner(VALID)
     run_once(SPEC, "B", 1, build_prompt("B"), runner, tmp_path)
     assert runner.searches == [False]
+
+
+# --- 条件 D（Web 検索＋draft-db＋自己検証） ---
+
+
+class _Tools:
+    specs: list = []
+
+    def call(self, name: str, args: dict) -> str:
+        return "{}"
+
+
+def _tool_runner(*texts: str):
+    """tools を受け取る偽の API。呼び出しごとに (web_search, tools があるか) を記録する。"""
+    calls: list[tuple[str, str]] = []
+    flags: list[tuple[bool, bool]] = []
+
+    def call(model_id, system, user, max_output_tokens, web_search=False, tools=None) -> RunnerResult:
+        calls.append((system, user))
+        flags.append((web_search, tools is not None))
+        return RunnerResult(
+            text=texts[len(calls) - 1], input_tokens=1000, output_tokens=500, tool_calls=2 if web_search else 0,
+            function_calls=4 if tools is not None else 0,
+        )
+
+    call.calls = calls  # type: ignore[attr-defined]
+    call.flags = flags  # type: ignore[attr-defined]
+    return call
+
+
+def test_build_prompt_d_stages() -> None:
+    p = build_prompt("D")
+    assert p.research and p.research.web_search and p.research.use_db and "search_players" in p.research.user
+    assert p.verify and not p.verify.web_search and p.verify.use_db
+    assert NOTES_PLACEHOLDER in p.verify.user and DRAFT_PLACEHOLDER in p.verify.user and '"first_round"' in p.verify.user
+    assert p.uses_db and not build_prompt("C").uses_db
+    assert "織田 翔希" not in p.user + p.research.user + p.verify.user  # マスタは最初から渡さない
+
+
+def test_estimate_d_exceeds_c() -> None:
+    assert estimate_max_cost(SPEC, build_prompt("D"), 1) > estimate_max_cost(SPEC, build_prompt("C"), 1)
+
+
+def test_run_once_d_research_format_verify(tmp_path: Path) -> None:
+    draft = prediction_payload()["output"]
+    draft["lotte"][0]["player_name"] = "確認前の選手"
+    runner = _tool_runner("調査メモ https://example.com/a", json.dumps(draft, ensure_ascii=False), VALID)
+    log = run_once(SPEC, "D", 1, build_prompt("D"), runner, tmp_path, tools=_Tools())
+
+    assert runner.flags == [(True, True), (False, False), (False, True)]  # 調査・整形・自己検証
+    verify_user = runner.calls[2][1]
+    assert "https://example.com/a" in verify_user and "確認前の選手" in verify_user
+    assert log.status == "ok" and log.attempts == 2 and log.tool_calls == 2 and log.function_calls == 8
+    assert "確認前の選手" in Path(log.draft_path).read_text(encoding="utf-8")
+    pred = Prediction.model_validate_json(Path(log.prediction_path).read_text(encoding="utf-8"))
+    assert pred.output.lotte[0].player_name != "確認前の選手"  # 自己検証の出力を保存する
+    assert log.cost_usd == pytest.approx(SPEC.cost_usd(3000, 1500, 2), abs=1e-6)
+
+
+def test_run_once_d_verify_retry_has_no_tools(tmp_path: Path) -> None:
+    runner = _tool_runner("メモ", VALID, "壊れた出力", VALID)
+    log = run_once(SPEC, "D", 1, build_prompt("D"), runner, tmp_path, tools=_Tools())
+    assert runner.flags[3] == (False, False) and "前回の出力:\n壊れた出力" in runner.calls[3][1]
+    assert log.status == "ok" and log.attempts == 3
+
+
+def test_run_once_d_invalid_verify_output_is_not_saved(tmp_path: Path) -> None:
+    runner = _tool_runner("メモ", VALID, "壊れた出力", "まだ壊れている")
+    log = run_once(SPEC, "D", 1, build_prompt("D"), runner, tmp_path, tools=_Tools())
+    assert log.status == "invalid_output" and log.prediction_path is None and log.draft_path
+
+
+def test_run_once_d_requires_tools(tmp_path: Path) -> None:
+    with pytest.raises(ValueError):
+        run_once(SPEC, "D", 1, build_prompt("D"), _tool_runner(), tmp_path)
+
+
+# --- 実行日 ---
+
+
+@pytest.mark.parametrize("condition", ["A", "B", "C", "D"])
+def test_build_prompt_fills_today(condition: str) -> None:
+    p = build_prompt(condition, today=date(2026, 10, 18))
+    texts = [p.system, p.user] + [t for s in (p.research, p.verify) if s for t in (s.system, s.user)]
+    assert all("{{TODAY}}" not in t for t in texts)
+    assert "今日は 2026年10月18日 です。" in (p.research.user if p.research else p.user)
+
+
+def test_prompt_hash_changes_with_date() -> None:
+    assert build_prompt("C", today=date(2026, 10, 18)).sha256 != build_prompt("C", today=date(2026, 10, 19)).sha256
+
+
+def test_today_jst_is_jst() -> None:
+    from src.run import JST, today_jst
+
+    assert today_jst() == datetime.now(JST).date()

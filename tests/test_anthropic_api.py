@@ -87,3 +87,57 @@ def test_tool_use_stop_on_other_block_does_not_resume(fake):
     client = fake([_msg([_text("メモ")], "tool_use", 1)])
     res = anthropic_api.call("m", "sys", "u", 1000, web_search=True)
     assert len(client.requests) == 1 and res.stop_reason == "tool_use(last=text)"
+
+
+class FakeTools:
+    specs = [SimpleNamespace(name="search_players", description="d", parameters={"type": "object"})]
+
+    def __init__(self):
+        self.calls = []
+
+    def call(self, name, args):
+        self.calls.append((name, args))
+        return '{"total": 0}'
+
+
+def _use(i):
+    return SimpleNamespace(type="tool_use", id=f"t{i}", name="search_players", input={"query": f"q{i}"})
+
+
+def test_function_tools_round_trip(fake):
+    u1, u2 = _use(1), _use(2)
+    client = fake([_msg([_text("確認します"), u1, u2], "tool_use", 0), _msg([_text("メモ")], "end_turn", 2)])
+    tools = FakeTools()
+
+    res = anthropic_api.call("m", "sys", "u", 1000, web_search=True, tools=tools)
+
+    assert [t["name"] for t in client.requests[0]["tools"]] == ["web_search", "search_players"]
+    assert tools.calls == [("search_players", {"query": "q1"}), ("search_players", {"query": "q2"})]
+    sent = client.requests[1]["messages"]
+    assert sent[1]["role"] == "assistant" and sent[1]["content"][1:] == [u1, u2]
+    assert sent[2] == {
+        "role": "user",
+        "content": [
+            {"type": "tool_result", "tool_use_id": "t1", "content": '{"total": 0}'},
+            {"type": "tool_result", "tool_use_id": "t2", "content": '{"total": 0}'},
+        ],
+    }
+    assert res.text == "メモ" and res.function_calls == 2 and res.tool_calls == 2
+
+
+def test_function_tool_turns_are_capped(fake, monkeypatch):
+    monkeypatch.setattr(anthropic_api, "MAX_TOOL_TURNS", 2)
+    client = fake([_msg([_use(i)], "tool_use", 0) for i in range(4)])
+    tools = FakeTools()
+    res = anthropic_api.call("m", "sys", "u", 1000, tools=tools)
+    # 上限の後の呼び出しは実行せず、上限に達したと返してもう1回だけ応答させる
+    assert len(client.requests) == 4 and len(tools.calls) == 2 and res.function_calls == 2
+    assert "上限" in client.requests[3]["messages"][-1]["content"][0]["content"]
+    assert res.stop_reason == "tool_use(last=tool_use)"
+
+
+def test_limit_lets_model_answer(fake, monkeypatch):
+    monkeypatch.setattr(anthropic_api, "MAX_TOOL_TURNS", 1)
+    fake([_msg([_use(1)], "tool_use", 0), _msg([_use(2)], "tool_use", 0), _msg([_text("メモ")], "end_turn", 0)])
+    res = anthropic_api.call("m", "sys", "u", 1000, tools=FakeTools())
+    assert res.text == "メモ" and res.function_calls == 1
