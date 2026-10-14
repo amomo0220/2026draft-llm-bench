@@ -1,0 +1,75 @@
+"""Anthropic ランナーの pause_turn からの再開（API は呼ばない）。"""
+
+from types import SimpleNamespace
+
+import pytest
+
+from src.runners import anthropic_api
+
+
+def _msg(blocks, stop_reason, searches):
+    usage = SimpleNamespace(
+        input_tokens=100, output_tokens=10, server_tool_use=SimpleNamespace(web_search_requests=searches)
+    )
+    return SimpleNamespace(content=blocks, stop_reason=stop_reason, usage=usage)
+
+
+def _text(t):
+    return SimpleNamespace(type="text", text=t)
+
+
+def _search(i):
+    return SimpleNamespace(type="server_tool_use", id=f"s{i}")
+
+
+class FakeClient:
+    def __init__(self, replies):
+        self.replies = list(replies)
+        self.requests = []
+        self.messages = self
+
+    def stream(self, **kwargs):
+        self.requests.append(kwargs)
+        reply = self.replies.pop(0)
+
+        class _Ctx:
+            def __enter__(self_inner):
+                return SimpleNamespace(get_final_message=lambda: reply)
+
+            def __exit__(self_inner, *a):
+                return False
+
+        return _Ctx()
+
+
+@pytest.fixture
+def fake(monkeypatch):
+    def install(replies):
+        client = FakeClient(replies)
+        monkeypatch.setenv(anthropic_api.API_KEY_ENV, "test")
+        monkeypatch.setattr(anthropic_api.anthropic, "Anthropic", lambda **kw: client)
+        return client
+
+    return install
+
+
+def test_pause_turn_resumes_with_all_paused_content(fake):
+    b1, b2 = _search(1), _search(2)
+    client = fake([_msg([b1], "pause_turn", 5), _msg([b2], "pause_turn", 4), _msg([_text('{"a"'), _text(": 1}")], "end_turn", 1)])
+
+    res = anthropic_api.call("m", "sys", "u", 1000, web_search=True)
+
+    assert len(client.requests) == 3
+    assert client.requests[0]["messages"] == [{"role": "user", "content": "u"}]
+    assert client.requests[1]["messages"][1] == {"role": "assistant", "content": [b1]}
+    # 2回目の再開では、1回目と2回目の一時停止までの内容をどちらも送り返す
+    assert client.requests[2]["messages"][1] == {"role": "assistant", "content": [b1, b2]}
+    assert res.text == '{"a": 1}'
+    assert (res.input_tokens, res.output_tokens, res.tool_calls) == (300, 30, 10)
+    assert res.stop_reason == "end_turn"
+
+
+def test_no_tools_without_web_search(fake):
+    client = fake([_msg([_text("{}")], "end_turn", 0)])
+    anthropic_api.call("m", "sys", "u", 1000)
+    assert client.requests[0]["tools"] == []

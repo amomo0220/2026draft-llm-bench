@@ -23,6 +23,7 @@ def call(model_id: str, system: str, user: str, max_output_tokens: int, web_sear
     messages: list[dict[str, Any]] = [{"role": "user", "content": user}]
     tools = [WEB_SEARCH_TOOL] if web_search else []
     in_tok = out_tok = searches = 0
+    paused: list[Any] = []  # 一時停止した応答の内容（再開のたびに積み上げる）
 
     for _ in range(MAX_CONTINUATIONS + 1):
         # 出力が長いので、SDK のタイムアウトを避けるためストリーミングで受け取る。thinking・effort は既定のまま
@@ -36,8 +37,9 @@ def call(model_id: str, system: str, user: str, max_output_tokens: int, web_sear
             searches += msg.usage.server_tool_use.web_search_requests or 0
         if msg.stop_reason != "pause_turn":
             break
-        # 一時停止した応答をそのまま足して再送すると、サーバーが続きから再開する
-        messages = [{"role": "user", "content": user}, {"role": "assistant", "content": msg.content}]
+        # 一時停止までの応答をすべて足して再送すると、サーバーが続きから再開する（"続けて" などは足さない）
+        paused += msg.content
+        messages = [{"role": "user", "content": user}, {"role": "assistant", "content": list(paused)}]
 
     # 引用付きの回答はテキストブロックが分割されるので連結する。最終の JSON は最後のテキストに入る
     text = "".join(b.text for b in msg.content if b.type == "text")
