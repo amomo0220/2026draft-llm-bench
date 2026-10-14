@@ -1,5 +1,6 @@
 [project]
 name = "draft-llm-bench"
+license = "MIT"
 version = "0.1.0"
 description = "2026プロ野球ドラフト × LLM／AIエージェント ライブ予測ベンチマーク"
 requires-python = ">=3.12"
