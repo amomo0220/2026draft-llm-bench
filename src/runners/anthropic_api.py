@@ -50,7 +50,7 @@ def call(
     tool_defs: list[dict[str, Any]] = [WEB_SEARCH_TOOL] if web_search else []
     if tools:
         tool_defs += [{"name": t.name, "description": t.description, "input_schema": t.parameters} for t in tools.specs]
-    in_tok = out_tok = searches = functions = 0
+    in_tok = out_tok = searches = functions = max_in = 0
     continuations = turns = 0
 
     while True:
@@ -60,6 +60,7 @@ def call(
         ) as stream:
             msg = stream.get_final_message()
         in_tok += msg.usage.input_tokens
+        max_in = max(max_in, msg.usage.input_tokens)
         out_tok += msg.usage.output_tokens
         if msg.usage.server_tool_use:
             searches += msg.usage.server_tool_use.web_search_requests or 0
@@ -92,5 +93,6 @@ def call(
         output_tokens=out_tok,
         tool_calls=searches,
         function_calls=functions,
+        max_request_input_tokens=max_in,
         stop_reason=stop,
     )

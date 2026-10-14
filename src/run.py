@@ -224,6 +224,7 @@ class RunLog(BaseModel):
     cost_usd: float
     tool_calls: int  # Web 検索の回数
     function_calls: int = 0  # draft-db のツールの呼び出し回数（条件 D）
+    max_request_input_tokens: int = 0  # 1回のリクエストの入力トークンの最大（長いコンテキストの割増の判定）
     api_retries: int  # API の例外による再試行の回数
     status: str  # ok / invalid_output / error
     error: str | None = None
@@ -262,7 +263,7 @@ def run_once(
     started = datetime.now(UTC)
     run_id = f"{condition}-{spec.model_id}-{run_no:02d}-{started.strftime('%Y%m%dT%H%M%SZ')}"
     t0 = time.monotonic()
-    totals = {"in": 0, "out": 0, "reasoning": None, "tools": 0, "functions": 0, "retries": 0, "attempts": 0}
+    totals = {"in": 0, "out": 0, "reasoning": None, "tools": 0, "functions": 0, "max_in": 0, "retries": 0, "attempts": 0}
     status, error, path, research_path, draft_path = "invalid_output", None, None, None, None
     out_dir = predictions_dir / condition / spec.model_id
 
@@ -279,6 +280,7 @@ def run_once(
         totals["out"] += res.output_tokens
         totals["tools"] += res.tool_calls
         totals["functions"] += res.function_calls
+        totals["max_in"] = max(totals["max_in"], res.max_request_input_tokens)
         if res.reasoning_tokens is not None:
             totals["reasoning"] = (totals["reasoning"] or 0) + res.reasoning_tokens
         return res
@@ -348,6 +350,7 @@ def run_once(
         cost_usd=round(spec.cost_usd(totals["in"], totals["out"], totals["tools"]), 6),
         tool_calls=totals["tools"],
         function_calls=totals["functions"],
+        max_request_input_tokens=totals["max_in"],
         api_retries=totals["retries"],
         status=status,
         error=error,
@@ -416,6 +419,13 @@ def main(argv: list[str] | None = None, runner: RunnerFn | None = None) -> int:
         )
         if log.error:
             print(f"    {log.error[:300]}", file=sys.stderr)
+        if spec.long_context_input_tokens and log.max_request_input_tokens > spec.long_context_input_tokens:
+            # cost_usd は通常の単価で計算しているので、実際の請求より低い
+            print(
+                f"    注意: 入力 {log.max_request_input_tokens} トークンのリクエストがあり、長いコンテキストの単価"
+                f"（{spec.long_context_input_tokens} 超）が適用されます。記録したコストは過小です",
+                file=sys.stderr,
+            )
     return 1 if failed else 0
 
 

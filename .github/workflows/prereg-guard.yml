@@ -1,0 +1,27 @@
+# 事前登録の保護（AGENTS.md ルール1、docs/PLAN.md 3.7）。
+# prereg-* タグがあるとき、predictions/ の late/ 以外がタグの時点から変わっていたら失敗する。
+# タグの移動・削除は、リポジトリのルールセットで防ぐ（設定手順は docs/PLAN.md 3.7）。
+name: prereg-guard
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  prereg-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # タグの時点のコミットまで取得する
+          fetch-tags: true
+          persist-credentials: false
+      - name: タグの一覧
+        run: git tag --list 'prereg-*'
+      - name: 事前登録した予測が変わっていないか
+        # 標準ライブラリと git だけを使うので、依存のインストールは不要
+        run: python3 -m src.prereg_guard

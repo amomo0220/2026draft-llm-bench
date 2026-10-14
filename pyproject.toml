@@ -1,5 +1,6 @@
 [project]
 name = "draft-llm-bench"
+license = "MIT"
 version = "0.1.0"
 description = "2026プロ野球ドラフト × LLM／AIエージェント ライブ予測ベンチマーク"
 requires-python = ">=3.12"
@@ -13,6 +14,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "playwright>=1.64.0",
     "pytest>=9.1.1",
 ]
 

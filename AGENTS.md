@@ -17,7 +17,7 @@
 ## 絶対に守るルール
 
 1. **事前登録の固定性**
-   - `predictions/` 配下のファイルは、事前登録タグ（例: `prereg-2026-10-20`）を打った後は **絶対に変更・削除しない**
+   - `predictions/` 配下のファイルは、事前登録タグ（`prereg-2026-10-15`）を打った後は **絶対に変更・削除しない**
    - 締切後に作った予測は、別ディレクトリ（`predictions/late/`）に、条件名に `late` を付けて保存する
 2. **出力は構造化する**
    - LLMの出力は必ず Pydantic スキーマで検証する。自由文の予測を採点対象にしない
@@ -76,6 +76,7 @@ uv run python -m src.actual data/actual/2026.json  # 実際の結果の入力チ
 uv run python -m src.build_candidates    # 候補者マスタの生成（data/raw/ の公式一覧から）
 uv run python -m src.candidates          # 候補者マスタの検証
 uv run python -m src.draft_db_mcp        # MCP サーバー起動
+uv run python -m src.prereg_guard        # 事前登録した predictions/ が変わっていないか（CI でも実行）
 ```
 
 ## コーディング規約

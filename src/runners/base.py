@@ -34,6 +34,7 @@ class RunnerResult:
     reasoning_tokens: int | None = None  # 内訳が取れる場合のみ
     tool_calls: int = 0  # Web 検索の回数（検索の料金の計算に使う）
     function_calls: int = 0  # 関数呼び出し（draft-db のツール）の回数
+    max_request_input_tokens: int = 0  # 1回のリクエストの入力トークンの最大（長いコンテキストの割増の判定に使う）
     stop_reason: str | None = None
 
 

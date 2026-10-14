@@ -16,15 +16,15 @@ class FakeTools:
         return '{"ok": true}'
 
 
-def _resp(rid, output, text=""):
-    usage = NS(input_tokens=100, output_tokens=10, output_tokens_details=NS(reasoning_tokens=4))
+def _resp(rid, output, text="", input_tokens=100):
+    usage = NS(input_tokens=input_tokens, output_tokens=10, output_tokens_details=NS(reasoning_tokens=4))
     return NS(id=rid, output=output, output_text=text, usage=usage, status="completed")
 
 
 def test_function_calls_continue_from_previous_response(monkeypatch):
     replies = [
         _resp("r1", [NS(type="web_search_call"), NS(type="function_call", call_id="c1", name="get_player", arguments='{"player_id": "HS-001"}')]),
-        _resp("r2", [NS(type="function_call", call_id="c2", name="get_player", arguments="not json")]),
+        _resp("r2", [NS(type="function_call", call_id="c2", name="get_player", arguments="not json")], input_tokens=150),
         _resp("r3", [NS(type="message")], "メモ"),
     ]
     requests = []
@@ -44,7 +44,8 @@ def test_function_calls_continue_from_previous_response(monkeypatch):
     assert "error" in requests[2]["input"][0]["output"]  # 引数が JSON でなければツールを呼ばずにエラーを返す
     assert tools.calls == [("get_player", {"player_id": "HS-001"})]
     assert (res.text, res.tool_calls, res.function_calls) == ("メモ", 1, 2)
-    assert (res.input_tokens, res.output_tokens, res.reasoning_tokens) == (300, 30, 12)
+    assert (res.input_tokens, res.output_tokens, res.reasoning_tokens) == (350, 30, 12)
+    assert res.max_request_input_tokens == 150  # 合計ではなく、1回のリクエストの最大
 
 
 def test_json_mode_without_tools(monkeypatch):

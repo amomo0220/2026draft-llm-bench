@@ -154,6 +154,28 @@ def test_main_runs_and_logs(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> 
     assert len(list((tmp_path / "p").rglob("*.json"))) == 2
 
 
+def test_main_warns_long_context(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """1回の入力が長いコンテキストの境目を超えたら警告し、runs.jsonl に最大値を残す。"""
+    monkeypatch.setenv("BUDGET_USD", "100")
+    spec = MODELS["gpt-5.6-terra"]
+    assert spec.long_context_input_tokens == 272_000
+
+    def call(model_id: str, system: str, user: str, max_output_tokens: int, web_search: bool = False) -> RunnerResult:
+        return RunnerResult(text=VALID, input_tokens=300_000, output_tokens=500, max_request_input_tokens=280_000)
+
+    args = ["--condition", "B", "--model", spec.model_id, "--predictions", str(tmp_path / "p"), "--runs", str(tmp_path / "runs.jsonl")]
+    assert main(args, runner=call) == 0
+    log = RunLog.model_validate_json((tmp_path / "runs.jsonl").read_text(encoding="utf-8"))
+    assert log.max_request_input_tokens == 280_000
+    assert "長いコンテキスト" in capsys.readouterr().err
+
+
+def test_main_no_warning_under_long_context(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    monkeypatch.setenv("BUDGET_USD", "100")
+    assert main(_args(tmp_path), runner=_runner(VALID)) == 0
+    assert "長いコンテキスト" not in capsys.readouterr().err
+
+
 # --- 条件 C（Web 検索） ---
 
 
