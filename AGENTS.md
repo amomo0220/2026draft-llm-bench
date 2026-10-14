@@ -76,6 +76,7 @@ uv run python -m src.actual data/actual/2026.json  # 実際の結果の入力チ
 uv run python -m src.build_candidates    # 候補者マスタの生成（data/raw/ の公式一覧から）
 uv run python -m src.candidates          # 候補者マスタの検証
 uv run python -m src.draft_db_mcp        # MCP サーバー起動
+uv run python -m src.prereg_guard        # 事前登録した predictions/ が変わっていないか（CI でも実行）
 ```
 
 ## コーディング規約

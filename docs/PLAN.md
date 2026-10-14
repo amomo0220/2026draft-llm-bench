@@ -221,6 +221,32 @@ LLM には **選手名・所属・ポジション** を出力させる（`player
 - タイムスタンプの証拠: 公開時刻＋タグ＋前編記事の公開日時（コミット日時は改ざんできるため単独では使わない）
 - 締切後の情報（指名公言など）を反映した予測は `late` 条件として別に扱う
 
+#### 事前登録の保護（2026-10-14）
+
+2つの仕組みで、タグを打った後の予測の書き換えを防ぐ。
+
+1. **予測の変更を拒むチェック**（`.github/workflows/prereg-guard.yml` → `src/prereg_guard.py`）
+   - push と PR のたびに実行する。`prereg-*` タグがあれば、タグの時点と比べて `predictions/` の `late/` 以外に変更・削除・追加（名前の変更を含む）があると失敗する。タグがなければ何もしない
+   - 手元でも `uv run python -m src.prereg_guard` で確かめられる
+2. **タグの移動・削除を防ぐルールセット**（GitHub の設定。コードでは作れない）
+   - ルールセットは、無料プランでは公開リポジトリでしか使えない（Pro・Team なら非公開でも使える）。そのため、公開してからタグを push する
+
+#### 10/20 の手順
+
+1. 本番の予測の PR を main にマージし、CI（prereg-guard を含む）が通っていることを確かめる
+2. 履歴にキーやトークンが入っていないかを確かめる（8章）
+3. リポジトリを公開する
+4. タグのルールセットを作る: Settings → Rules → Rulesets → New ruleset → **New tag ruleset**
+   - Ruleset name: `prereg`、Enforcement status: **Active**、Bypass list: 空のまま（管理者も含めて例外を作らない）
+   - Target tags: Add target → Include by pattern → `prereg-*`
+   - Rules: **Restrict updates**、**Restrict deletions**、**Block force pushes** にチェック（Restrict creations は付けない。付けるとタグを作れない）
+5. main のルールセットを作る: New ruleset → **New branch ruleset**
+   - Target branches: Include default branch、Enforcement status: **Active**
+   - Rules: **Restrict deletions**、**Block force pushes**、**Require status checks to pass** → `prereg-guard` を追加
+6. main の最新のコミットにタグを打って push する
+   - `git checkout main && git pull && git tag -a prereg-2026-10-20 -m "事前登録（締切 2026-10-20 23:59 JST）" && git push origin prereg-2026-10-20`
+7. 確かめる: Actions で prereg-guard が「OK: prereg-2026-10-20 の時点から…」になる／Settings → Rules → Rulesets で `prereg` が Active、対象が `prereg-*` になっている（タグを実際に消して試すことはしない。ルールセットが効いていなければタグが消えてしまうため）
+
 ## 4. 技術スタック
 
 | 技術 | 役割 |
