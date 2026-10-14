@@ -37,12 +37,13 @@ def call(
     resp = client.responses.create(
         model=model_id, instructions=system, input=user, max_output_tokens=max_output_tokens, **kwargs
     )
-    in_tok = out_tok = searches = functions = turns = 0
+    in_tok = out_tok = searches = functions = turns = max_in = 0
     reasoning: int | None = None
     while True:
         usage = resp.usage
         if usage:
             in_tok += usage.input_tokens
+            max_in = max(max_in, usage.input_tokens)
             out_tok += usage.output_tokens
             if usage.output_tokens_details:
                 reasoning = (reasoning or 0) + usage.output_tokens_details.reasoning_tokens
@@ -78,6 +79,7 @@ def call(
         reasoning_tokens=reasoning,
         tool_calls=searches,
         function_calls=functions,
+        max_request_input_tokens=max_in,
         stop_reason=resp.status,
     )
 

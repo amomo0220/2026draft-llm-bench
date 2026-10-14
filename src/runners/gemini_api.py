@@ -76,14 +76,16 @@ def call(
     # thinking は既定のまま。スキーマの検証は呼び出し側の Pydantic で行う
     config = types.GenerateContentConfig(system_instruction=system, max_output_tokens=max_output_tokens, **extra)
     contents: list[types.Content] = [types.Content(role="user", parts=[types.Part(text=user)])]
-    in_tok = out_tok = thoughts_total = searches = functions = turns = 0
+    in_tok = out_tok = thoughts_total = searches = functions = turns = max_in = 0
 
     while True:
         resp = client.models.generate_content(model=model_id, contents=contents, config=config)
         u = resp.usage_metadata
         if u:
             thoughts = u.thoughts_token_count or 0
-            in_tok += (u.prompt_token_count or 0) + (u.tool_use_prompt_token_count or 0)
+            request_in = (u.prompt_token_count or 0) + (u.tool_use_prompt_token_count or 0)
+            in_tok += request_in
+            max_in = max(max_in, request_in)
             out_tok += (u.candidates_token_count or 0) + thoughts  # 思考トークンも出力として課金される
             thoughts_total += thoughts
         cand = resp.candidates[0] if resp.candidates else None
@@ -116,5 +118,6 @@ def call(
         reasoning_tokens=thoughts_total,
         tool_calls=searches,
         function_calls=functions,
+        max_request_input_tokens=max_in,
         stop_reason=str(cand.finish_reason) if cand and cand.finish_reason is not None else None,
     )

@@ -10,8 +10,11 @@
   月5,000件まで無料。無料枠は見積もりに入れない）。Gemini API（ai.google.dev）の料金ページはこの環境から開けず、
   検索結果の抜粋で同じ料金であることだけ確かめた
 - OpenAI: 公式の料金ページ（https://platform.openai.com/docs/pricing）をユーザーが保存した HTML で確認。
-  Web 検索は全モデル $10 / 1,000回（検索結果のトークンはモデルの単価で別に課金）。gpt-5.6-terra のトークン単価は
-  このページに載っておらず未確認（$2 / $12 は二次情報）
+  Web 検索は全モデル $10 / 1,000回（検索結果のトークンはモデルの単価で別に課金）。gpt-5.6-terra のトークン単価
+  （Standard・短いコンテキストで $2 / $12）は、2026-10-14 にユーザーが公式のモデル仕様と料金表で確認した。
+  入力が 272,000 トークンを超えるリクエストは、リクエスト全体が長いコンテキストの単価（$4 / $18）になる。
+  コストの計算は通常の単価だけで行い、超えたリクエストがあれば実行時に警告する（runs.jsonl の
+  max_request_input_tokens で確かめられる）
 """
 
 from dataclasses import dataclass
@@ -31,6 +34,7 @@ class ModelSpec:
     input_usd_per_mtok: float
     output_usd_per_mtok: float  # 推論（thinking）トークンを含む出力の単価
     search_usd_per_call: float  # Web 検索1回あたり（条件 C・D）。Gemini は検索語1つあたり
+    long_context_input_tokens: int | None = None  # 1回の入力がこれを超えると割増の単価になる（計算には入れず警告だけ）
 
     def cost_usd(self, input_tokens: int, output_tokens: int, searches: int = 0) -> float:
         tokens = input_tokens * self.input_usd_per_mtok + output_tokens * self.output_usd_per_mtok
@@ -41,7 +45,7 @@ MODELS: dict[str, ModelSpec] = {
     m.model_id: m
     for m in [
         ModelSpec(Provider.ANTHROPIC, "claude-sonnet-5-5", 2.00, 10.00, 0.01),
-        ModelSpec(Provider.OPENAI, "gpt-5.6-terra", 2.00, 12.00, 0.01),  # トークン単価は要確認（モジュールの説明）
+        ModelSpec(Provider.OPENAI, "gpt-5.6-terra", 2.00, 12.00, 0.01, long_context_input_tokens=272_000),
         ModelSpec(Provider.GEMINI, "gemini-3.8-flash", 0.75, 3.75, 0.014),  # トークン単価は2026年末までの導入価格
     ]
 }
