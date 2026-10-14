@@ -1,17 +1,25 @@
-"""プロ志望届の一覧ページ（data/raw/ に保存した HTML）から data/candidates.csv を生成する。
+"""プロ志望届の公式一覧（data/raw/ に保存した HTML）から data/candidates.csv を生成する。
+
+出典:
+- 高校: 日本高等学校野球連盟（jhbf.or.jp）
+- 大学: 全日本大学野球連盟（jubf.net）
 
 生データ（HTML）はコミットしない。コミットするのは生成した CSV とこのスクリプトのみ。
 社会人・独立リーグの候補は data/candidates_extra.csv に手で入力し、ここで結合する。
 
+読み込むのは見出しが「NPBドラフト対象者」の表だけ。ページに書かれた「合計：N名」と
+読み込んだ人数が一致しない場合はエラーにする。
+
 player_id は再生成しても変わらないようにする:
-既存の candidates.csv にある選手（区分・所属・名前が一致）は同じ ID を使い、
-新しい選手には区分ごとの最大番号の次を振る。
+既存の candidates.csv にある選手は同じ ID を使う（区分・所属・名前が一致する選手、
+所属が変わった場合は区分・名前が一意に一致する選手）。新しい選手には区分ごとの最大番号の次を振る。
 
 使い方:
     uv run python -m src.build_candidates
 """
 
 import csv
+import re
 import sys
 from dataclasses import dataclass
 from html.parser import HTMLParser
@@ -25,83 +33,127 @@ class Source:
     category: Category
     html_path: Path
     url: str
+    num_cols: int
+    team_col: int
+    name_col: int
+    kana_col: int | None = None
 
 
 SOURCES = [
-    Source(Category.HIGH_SCHOOL, Path("data/raw/bc_287000_highschool.html"), "https://www.baseballchannel.jp/npb/287000/"),
-    Source(Category.UNIVERSITY, Path("data/raw/bc_287011_university.html"), "https://www.baseballchannel.jp/npb/287011/"),
+    # 都道府県／学校名／氏名／受付日
+    Source(
+        Category.HIGH_SCHOOL,
+        Path("data/raw/jhbf_2026_highschool.html"),
+        "https://www.jhbf.or.jp/pro-aspiring/2026.html",
+        num_cols=4,
+        team_col=1,
+        name_col=2,
+    ),
+    # 連盟／学校名／氏名／ふりがな／受付日
+    Source(
+        Category.UNIVERSITY,
+        Path("data/raw/jubf_2026_university.html"),
+        "https://www.jubf.net/system/prog/procandidate.php?kind=all&year=2026",
+        num_cols=5,
+        team_col=1,
+        name_col=2,
+        kana_col=3,
+    ),
 ]
 EXTRA_PATH = Path("data/candidates_extra.csv")
 OUT_PATH = Path("data/candidates.csv")
 
-# この見出しの下の表は NPB ドラフトの対象外なので読まない
-EXCLUDED_SECTION = "NPBドラフト対象外"
+TARGET_SECTION = "NPBドラフト対象者"
 HEADER_FIRST_CELLS = {"都道府県", "連盟"}
-NUM_CELLS = 4  # 都道府県（連盟）／学校名／氏名／受付日
+TOTAL_RE = re.compile(r"合計[：:\s]*(\d+)\s*名")
 
 
-class _TableParser(HTMLParser):
-    """h2 見出しごとに、その下の表の行（セル文字列のリスト）を集める。"""
+@dataclass
+class _Section:
+    heading: str
+    rows: list[list[str]]
+    text: list[str]
+
+
+class _SectionParser(HTMLParser):
+    """見出し（h1〜h4、または class="section" の span）ごとに、表の行と本文テキストを集める。"""
 
     def __init__(self) -> None:
         super().__init__()
-        self.sections: list[tuple[str, list[list[str]]]] = []
-        self._in_h2 = False
-        self._h2_buf: list[str] = []
+        self.sections: list[_Section] = []
+        self._heading_tag: str | None = None
+        self._heading_buf: list[str] = []
         self._row: list[str] | None = None
         self._cell: list[str] | None = None
-        self._in_table = False
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
-        if tag == "h2":
-            self._in_h2, self._h2_buf = True, []
-        elif tag == "table":
-            self._in_table = True
-        elif tag == "tr" and self._in_table:
+        is_section_span = tag == "span" and dict(attrs).get("class") == "section"
+        if tag in ("h1", "h2", "h3", "h4") or is_section_span:
+            self._heading_tag, self._heading_buf = tag, []
+        elif tag == "tr":
             self._row = []
         elif tag in ("td", "th") and self._row is not None:
             self._cell = []
 
     def handle_endtag(self, tag: str) -> None:
-        if tag == "h2" and self._in_h2:
-            self._in_h2 = False
-            self.sections.append(("".join(self._h2_buf).strip(), []))
-        elif tag == "table":
-            self._in_table = False
+        if tag == self._heading_tag:
+            self._heading_tag = None
+            self.sections.append(_Section("".join(self._heading_buf).strip(), [], []))
         elif tag in ("td", "th") and self._cell is not None and self._row is not None:
             self._row.append("".join(self._cell).strip())
             self._cell = None
         elif tag == "tr" and self._row is not None:
-            if self.sections:
-                self.sections[-1][1].append(self._row)
+            if self.sections and self._row:
+                self.sections[-1].rows.append(self._row)
             self._row = None
 
     def handle_data(self, data: str) -> None:
-        if self._in_h2:
-            self._h2_buf.append(data)
-        elif self._cell is not None:
+        if self._heading_tag:
+            self._heading_buf.append(data)
+            return
+        if self._cell is not None:
             self._cell.append(data)
+        if self.sections:
+            self.sections[-1].text.append(data)
 
 
-def normalize_name(name: str) -> str:
+def normalize_space(text: str) -> str:
     """空白（全角を含む）を半角スペース1つにそろえる。"""
-    return " ".join(name.split())
+    return " ".join(text.split())
 
 
-def parse_submissions(html: str) -> list[tuple[str, str]]:
-    """志望届一覧の HTML から (学校名, 氏名) のリストを返す。"""
-    parser = _TableParser()
+@dataclass(frozen=True)
+class Submission:
+    team: str
+    name: str
+    kana: str | None
+
+
+def parse_submissions(html: str, src: Source) -> list[Submission]:
+    """志望届一覧の HTML から「NPBドラフト対象者」の行を返す。"""
+    parser = _SectionParser()
     parser.feed(html)
-    result: list[tuple[str, str]] = []
-    for heading, rows in parser.sections:
-        if heading == EXCLUDED_SECTION:
-            continue
-        for cells in rows:
-            if not cells or cells[0] in HEADER_FIRST_CELLS:
-                continue
-            if len(cells) != NUM_CELLS:
-                raise ValueError(f"{heading}: 列数が想定外です: {cells}")
-            result.append((cells[1].strip(), normalize_name(cells[2])))
+    targets = [s for s in parser.sections if s.heading.endswith(TARGET_SECTION)]
+    if len(targets) != 1:
+        raise ValueError(f"{src.url}: 「{TARGET_SECTION}」の見出しが {len(targets)} 個あります")
+    section = targets[0]
+
+    result: list[Submission] = []
+    for cells in section.rows:
+        if cells[0] in HEADER_FIRST_CELLS or "合計" in cells:
+            continue  # 見出し行・合計行
+        if len(cells) == src.num_cols and not cells[src.team_col] and not cells[src.name_col]:
+            continue  # 提出者のいない連盟の行（連盟名だけが入っている）
+        if len(cells) != src.num_cols:
+            raise ValueError(f"{src.url}: 列数が想定外です: {cells}")
+        kana = normalize_space(cells[src.kana_col]) if src.kana_col is not None else None
+        result.append(Submission(cells[src.team_col].strip(), normalize_space(cells[src.name_col]), kana or None))
+
+    m = TOTAL_RE.search("".join(section.text))
+    if m is None:
+        raise ValueError(f"{src.url}: 「合計：N名」が見つかりません")
+    if int(m.group(1)) != len(result):
+        raise ValueError(f"{src.url}: ページの合計 {m.group(1)}名 と読み込んだ人数 {len(result)}名 が一致しません")
     return result
 
 
@@ -109,26 +161,52 @@ def _id_number(player_id: str) -> int:
     return int(player_id.split("-")[1])
 
 
+class _IdAssigner:
+    """既存の candidates.csv をもとに player_id を振る。"""
+
+    def __init__(self, existing: list[Candidate]) -> None:
+        self._by_team = {(c.category, c.team, name_key(c.name)): c.player_id for c in existing}
+        by_name: dict[tuple[Category, str], list[str]] = {}
+        for c in existing:
+            by_name.setdefault((c.category, name_key(c.name)), []).append(c.player_id)
+        self._by_name = {k: v[0] for k, v in by_name.items() if len(v) == 1}
+        self._next = {
+            cat: 1 + max((_id_number(c.player_id) for c in existing if c.category == cat), default=0) for cat in Category
+        }
+        self._used: set[str] = set()
+
+    def assign(self, category: Category, team: str, name: str) -> str:
+        key = name_key(name)
+        pid = self._by_team.get((category, team, key)) or self._by_name.get((category, key))
+        if pid is None or pid in self._used:
+            pid = f"{ID_PREFIX[category]}-{self._next[category]:03d}"
+            self._next[category] += 1
+        self._used.add(pid)
+        return pid
+
+
 def build(sources: list[Source], extra_path: Path, out_path: Path) -> tuple[list[Candidate], list[str]]:
     """候補者を組み立て、(行, 警告) を返す。出典内の完全一致の重複行は1件にまとめて警告する。"""
-    existing = load_candidates(out_path) if out_path.exists() else []
-    known = {(c.category, c.team, name_key(c.name)): c.player_id for c in existing}
-    next_no = {cat: 1 + max((_id_number(c.player_id) for c in existing if c.category == cat), default=0) for cat in Category}
-
+    ids = _IdAssigner(load_candidates(out_path) if out_path.exists() else [])
     rows: list[Candidate] = []
     warnings: list[str] = []
     for src in sources:
         seen: set[tuple[str, str]] = set()
-        for team, name in parse_submissions(src.html_path.read_text(encoding="utf-8")):
-            if (team, name_key(name)) in seen:
-                warnings.append(f"出典内の重複行を1件にまとめました: {name}（{team}） {src.url}")
+        for sub in parse_submissions(src.html_path.read_text(encoding="utf-8"), src):
+            if (sub.team, name_key(sub.name)) in seen:
+                warnings.append(f"出典内の重複行を1件にまとめました: {sub.name}（{sub.team}） {src.url}")
                 continue
-            seen.add((team, name_key(name)))
-            pid = known.get((src.category, team, name_key(name)))
-            if pid is None:
-                pid = f"{ID_PREFIX[src.category]}-{next_no[src.category]:03d}"
-                next_no[src.category] += 1
-            rows.append(Candidate(player_id=pid, name=name, category=src.category, team=team, source_url=src.url))
+            seen.add((sub.team, name_key(sub.name)))
+            rows.append(
+                Candidate(
+                    player_id=ids.assign(src.category, sub.team, sub.name),
+                    name=sub.name,
+                    kana=sub.kana,
+                    category=src.category,
+                    team=sub.team,
+                    source_url=src.url,
+                )
+            )
 
     if extra_path.exists():
         rows += load_candidates(extra_path)
