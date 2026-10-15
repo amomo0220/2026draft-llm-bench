@@ -1,0 +1,321 @@
+{
+ "run_id": "C-gemini-3.8-flash-01-20261015T085145Z",
+ "model_id": "gemini-3.8-flash",
+ "condition": "C",
+ "output": {
+  "first_round": [
+   {
+    "team": "G",
+    "candidates": [
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院高",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "榊原七斗",
+      "affiliation": "明治大",
+      "position": "外野手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "藤澤涼介",
+      "affiliation": "東京ガス",
+      "position": "外野手",
+      "prob": 0.2
+     }
+    ]
+   },
+   {
+    "team": "T",
+    "candidates": [
+     {
+      "player_name": "渡部海",
+      "affiliation": "青山学院大",
+      "position": "捕手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.4
+     }
+    ]
+   },
+   {
+    "team": "DB",
+    "candidates": [
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院高",
+      "position": "投手",
+      "prob": 0.4
+     }
+    ]
+   },
+   {
+    "team": "C",
+    "candidates": [
+     {
+      "player_name": "渡部海",
+      "affiliation": "青山学院大",
+      "position": "捕手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.5
+     }
+    ]
+   },
+   {
+    "team": "S",
+    "candidates": [
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "有馬伽久",
+      "affiliation": "立命館大",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院高",
+      "position": "投手",
+      "prob": 0.2
+     }
+    ]
+   },
+   {
+    "team": "D",
+    "candidates": [
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "川尻啓人",
+      "affiliation": "亜細亜大",
+      "position": "投手",
+      "prob": 0.5
+     }
+    ]
+   },
+   {
+    "team": "H",
+    "candidates": [
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院高",
+      "position": "投手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.4
+     }
+    ]
+   },
+   {
+    "team": "F",
+    "candidates": [
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院高",
+      "position": "投手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.4
+     }
+    ]
+   },
+   {
+    "team": "B",
+    "candidates": [
+     {
+      "player_name": "有馬伽久",
+      "affiliation": "立命館大",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "川尻啓人",
+      "affiliation": "亜細亜大",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.2
+     }
+    ]
+   },
+   {
+    "team": "E",
+    "candidates": [
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.5
+     }
+    ]
+   },
+   {
+    "team": "L",
+    "candidates": [
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院高",
+      "position": "投手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.4
+     }
+    ]
+   },
+   {
+    "team": "M",
+    "candidates": [
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院高",
+      "position": "投手",
+      "prob": 0.2
+     }
+    ]
+   }
+  ],
+  "contested": [
+   {
+    "player_name": "菰田陽生",
+    "affiliation": "山梨学院高",
+    "position": "投手",
+    "num_teams": 4
+   },
+   {
+    "player_name": "鈴木泰成",
+    "affiliation": "青山学院大",
+    "position": "投手",
+    "num_teams": 3
+   },
+   {
+    "player_name": "米沢友翔",
+    "affiliation": "関西大",
+    "position": "投手",
+    "num_teams": 3
+   },
+   {
+    "player_name": "渡部海",
+    "affiliation": "青山学院大",
+    "position": "捕手",
+    "num_teams": 2
+   }
+  ],
+  "lotte": [
+   {
+    "player_name": "鈴木泰成",
+    "affiliation": "青山学院大",
+    "position": "投手",
+    "round": 1,
+    "reason": "チーム防御率の改善に向けて安定して先発ローテーションを担える即戦力右腕が最重要補強ポイントとなっているためです。",
+    "sources": [
+     "https://sports.yahoo.co.jp/",
+     "https://kyureki.com/",
+     "https://zabero.hatenablog.com/"
+    ]
+   },
+   {
+    "player_name": "川尻啓人",
+    "affiliation": "亜細亜大",
+    "position": "投手",
+    "round": 2,
+    "reason": "先発陣の頭数不足を迅速に解消するため、秋にノーヒットノーランを達成し評価を急上昇させている実力派右腕を上位で確保する狙いです。",
+    "sources": [
+     "https://kyureki.com/",
+     "https://weeklybaseball.online/"
+    ]
+   },
+   {
+    "player_name": "前田侑大",
+    "affiliation": "高岡第一高",
+    "position": "投手",
+    "round": 3,
+    "reason": "最速156km/hを誇る将来のエース候補左腕を指名し、将来的な先発ローテーションの柱として育成を図ります。",
+    "sources": [
+     "https://sports.yahoo.co.jp/",
+     "https://hb-nippon.com/"
+    ]
+   },
+   {
+    "player_name": "柴崎聖人",
+    "affiliation": "王子",
+    "position": "外野手",
+    "round": 4,
+    "reason": "高い身体能力を備えた社会人外野手を指名し、外野陣の層を厚くして選手層全体の底上げを図ります。",
+    "sources": [
+     "https://kyureki.com/",
+     "https://zabero.hatenablog.com/"
+    ]
+   },
+   {
+    "player_name": "近藤琉唯斗",
+    "affiliation": "小樽双葉高",
+    "position": "投手",
+    "round": 5,
+    "reason": "最速152km/hの剛腕を持つ高校生投手を指名し、将来のリリーフや先発の核としてファームでの底上げを狙います。",
+    "sources": [
+     "https://hb-nippon.com/",
+     "https://kyureki.com/"
+    ]
+   }
+  ]
+ }
+}
