@@ -98,9 +98,8 @@ AI は、ある時点までの大量の文章を読んで学習しています�
 - GPT-5.6 Terra：2026年2月
 - Gemini 3.8 Flash：2026年3月
 
-<!-- 出典: Claude は Anthropic の公式ドキュメント（https://platform.claude.com/docs/en/about-claude/models/overview）。
-Gemini は Google DeepMind のモデルカード（検索結果で確認。ページは未確認）。
-GPT は OpenAI の公式ページで未確認（Box・OpenRouter などのモデル情報では 2026-02-16）。公開前に OpenAI の公式ページで確かめる -->
+<!-- 出典（2026-10-15 確認）: Claude は Anthropic の公式ドキュメント（https://platform.claude.com/docs/en/about-claude/models/overview）。
+GPT は OpenAI のモデル仕様、Gemini は Google DeepMind のモデルカード（ユーザーが公式ページで確認） -->
 
 どの AI も、夏の甲子園や秋の大会、9月から10月のプロ志望届の提出、そして今日の進路表明は知りません。ただ、カットオフまでに報じられていた「この選手はドラフト上位候補」といった評判は、ある程度覚えています。覚えている時期は AI ごとに数か月ずれていて、これも予想の違いになって表れます。
 
