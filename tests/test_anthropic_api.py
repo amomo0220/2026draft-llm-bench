@@ -83,10 +83,19 @@ def test_tool_use_stop_on_server_tool_resumes(fake):
     assert res.text == "{}" and res.tool_calls == 2
 
 
+def test_tool_use_stop_on_thinking_resumes(fake):
+    """本番の条件 D で観測: 関数呼び出しなしの tool_use で、最後のブロックが思考のまま止まった。"""
+    t = SimpleNamespace(type="thinking", thinking="")
+    client = fake([_msg([_search(1), t], "tool_use", 1), _msg([_text("メモ")], "end_turn", 1)])
+    res = anthropic_api.call("m", "sys", "u", 1000, web_search=True, tools=FakeTools())
+    assert len(client.requests) == 2 and client.requests[1]["messages"][1]["content"][-1] is t
+    assert res.text == "メモ"
+
+
 def test_tool_use_stop_on_other_block_does_not_resume(fake):
     client = fake([_msg([_text("メモ")], "tool_use", 1)])
     res = anthropic_api.call("m", "sys", "u", 1000, web_search=True)
-    assert len(client.requests) == 1 and res.stop_reason == "tool_use(last=text)"
+    assert len(client.requests) == 1 and res.stop_reason == "tool_use(last=text, turns=0, continuations=0)"
 
 
 class FakeTools:
@@ -133,7 +142,7 @@ def test_function_tool_turns_are_capped(fake, monkeypatch):
     # 上限の後の呼び出しは実行せず、上限に達したと返してもう1回だけ応答させる
     assert len(client.requests) == 4 and len(tools.calls) == 2 and res.function_calls == 2
     assert "上限" in client.requests[3]["messages"][-1]["content"][0]["content"]
-    assert res.stop_reason == "tool_use(last=tool_use)"
+    assert res.stop_reason == "tool_use(last=tool_use, turns=3, continuations=0)"
 
 
 def test_limit_lets_model_answer(fake, monkeypatch):
