@@ -1,0 +1,480 @@
+{
+ "first_round": [
+  {
+   "team": "G",
+   "candidates": [
+    {
+     "player_name": "鈴木泰成",
+     "affiliation": "青山学院大",
+     "position": "投手",
+     "prob": 0.3
+    },
+    {
+     "player_name": "馬場拓海",
+     "affiliation": "日本体育大",
+     "position": "投手",
+     "prob": 0.28
+    },
+    {
+     "player_name": "菰田陽生",
+     "affiliation": "山梨学院高",
+     "position": "投手",
+     "prob": 0.25
+    },
+    {
+     "player_name": "渡部海",
+     "affiliation": "青山学院大",
+     "position": "捕手",
+     "prob": 0.12
+    },
+    {
+     "player_name": "織田翔希",
+     "affiliation": "横浜高",
+     "position": "投手",
+     "prob": 0.05
+    }
+   ]
+  },
+  {
+   "team": "T",
+   "candidates": [
+    {
+     "player_name": "渡部海",
+     "affiliation": "青山学院大",
+     "position": "捕手",
+     "prob": 0.7
+    },
+    {
+     "player_name": "鈴木泰成",
+     "affiliation": "青山学院大",
+     "position": "投手",
+     "prob": 0.1
+    },
+    {
+     "player_name": "菰田陽生",
+     "affiliation": "山梨学院高",
+     "position": "投手",
+     "prob": 0.1
+    },
+    {
+     "player_name": "前嶋藍",
+     "affiliation": "亜細亜大",
+     "position": "捕手",
+     "prob": 0.05
+    },
+    {
+     "player_name": "織田翔希",
+     "affiliation": "横浜高",
+     "position": "投手",
+     "prob": 0.05
+    }
+   ]
+  },
+  {
+   "team": "DB",
+   "candidates": [
+    {
+     "player_name": "菰田陽生",
+     "affiliation": "山梨学院高",
+     "position": "投手",
+     "prob": 0.35
+    },
+    {
+     "player_name": "鈴木泰成",
+     "affiliation": "青山学院大",
+     "position": "投手",
+     "prob": 0.25
+    },
+    {
+     "player_name": "織田翔希",
+     "affiliation": "横浜高",
+     "position": "投手",
+     "prob": 0.15
+    },
+    {
+     "player_name": "川尻啓人",
+     "affiliation": "亜細亜大",
+     "position": "投手",
+     "prob": 0.15
+    },
+    {
+     "player_name": "渡部海",
+     "affiliation": "青山学院大",
+     "position": "捕手",
+     "prob": 0.1
+    }
+   ]
+  },
+  {
+   "team": "C",
+   "candidates": [
+    {
+     "player_name": "鈴木泰成",
+     "affiliation": "青山学院大",
+     "position": "投手",
+     "prob": 0.4
+    },
+    {
+     "player_name": "菰田陽生",
+     "affiliation": "山梨学院高",
+     "position": "投手",
+     "prob": 0.2
+    },
+    {
+     "player_name": "川尻啓人",
+     "affiliation": "亜細亜大",
+     "position": "投手",
+     "prob": 0.15
+    },
+    {
+     "player_name": "宮原廉",
+     "affiliation": "近畿大",
+     "position": "投手",
+     "prob": 0.15
+    },
+    {
+     "player_name": "織田翔希",
+     "affiliation": "横浜高",
+     "position": "投手",
+     "prob": 0.1
+    }
+   ]
+  },
+  {
+   "team": "S",
+   "candidates": [
+    {
+     "player_name": "米沢友翔",
+     "affiliation": "関西大",
+     "position": "投手",
+     "prob": 0.3
+    },
+    {
+     "player_name": "鈴木泰成",
+     "affiliation": "青山学院大",
+     "position": "投手",
+     "prob": 0.25
+    },
+    {
+     "player_name": "菰田陽生",
+     "affiliation": "山梨学院高",
+     "position": "投手",
+     "prob": 0.25
+    },
+    {
+     "player_name": "川尻啓人",
+     "affiliation": "亜細亜大",
+     "position": "投手",
+     "prob": 0.1
+    },
+    {
+     "player_name": "織田翔希",
+     "affiliation": "横浜高",
+     "position": "投手",
+     "prob": 0.1
+    }
+   ]
+  },
+  {
+   "team": "D",
+   "candidates": [
+    {
+     "player_name": "鈴木泰成",
+     "affiliation": "青山学院大",
+     "position": "投手",
+     "prob": 0.45
+    },
+    {
+     "player_name": "渡部海",
+     "affiliation": "青山学院大",
+     "position": "捕手",
+     "prob": 0.25
+    },
+    {
+     "player_name": "菰田陽生",
+     "affiliation": "山梨学院高",
+     "position": "投手",
+     "prob": 0.2
+    },
+    {
+     "player_name": "川尻啓人",
+     "affiliation": "亜細亜大",
+     "position": "投手",
+     "prob": 0.1
+    }
+   ]
+  },
+  {
+   "team": "H",
+   "candidates": [
+    {
+     "player_name": "織田翔希",
+     "affiliation": "横浜高",
+     "position": "投手",
+     "prob": 0.3
+    },
+    {
+     "player_name": "菰田陽生",
+     "affiliation": "山梨学院高",
+     "position": "投手",
+     "prob": 0.25
+    },
+    {
+     "player_name": "鈴木泰成",
+     "affiliation": "青山学院大",
+     "position": "投手",
+     "prob": 0.25
+    },
+    {
+     "player_name": "川尻啓人",
+     "affiliation": "亜細亜大",
+     "position": "投手",
+     "prob": 0.1
+    },
+    {
+     "player_name": "宮原廉",
+     "affiliation": "近畿大",
+     "position": "投手",
+     "prob": 0.1
+    }
+   ]
+  },
+  {
+   "team": "F",
+   "candidates": [
+    {
+     "player_name": "鈴木泰成",
+     "affiliation": "青山学院大",
+     "position": "投手",
+     "prob": 0.4
+    },
+    {
+     "player_name": "菰田陽生",
+     "affiliation": "山梨学院高",
+     "position": "投手",
+     "prob": 0.3
+    },
+    {
+     "player_name": "織田翔希",
+     "affiliation": "横浜高",
+     "position": "投手",
+     "prob": 0.15
+    },
+    {
+     "player_name": "宮原廉",
+     "affiliation": "近畿大",
+     "position": "投手",
+     "prob": 0.15
+    }
+   ]
+  },
+  {
+   "team": "B",
+   "candidates": [
+    {
+     "player_name": "渡部海",
+     "affiliation": "青山学院大",
+     "position": "捕手",
+     "prob": 0.3
+    },
+    {
+     "player_name": "米沢友翔",
+     "affiliation": "関西大",
+     "position": "投手",
+     "prob": 0.2
+    },
+    {
+     "player_name": "菰田陽生",
+     "affiliation": "山梨学院高",
+     "position": "投手",
+     "prob": 0.2
+    },
+    {
+     "player_name": "鈴木泰成",
+     "affiliation": "青山学院大",
+     "position": "投手",
+     "prob": 0.2
+    },
+    {
+     "player_name": "宮原廉",
+     "affiliation": "近畿大",
+     "position": "投手",
+     "prob": 0.1
+    }
+   ]
+  },
+  {
+   "team": "E",
+   "candidates": [
+    {
+     "player_name": "菰田陽生",
+     "affiliation": "山梨学院高",
+     "position": "投手",
+     "prob": 0.3
+    },
+    {
+     "player_name": "鈴木泰成",
+     "affiliation": "青山学院大",
+     "position": "投手",
+     "prob": 0.25
+    },
+    {
+     "player_name": "渡部海",
+     "affiliation": "青山学院大",
+     "position": "捕手",
+     "prob": 0.2
+    },
+    {
+     "player_name": "有馬伽久",
+     "affiliation": "立命館大",
+     "position": "投手",
+     "prob": 0.15
+    },
+    {
+     "player_name": "織田翔希",
+     "affiliation": "横浜高",
+     "position": "投手",
+     "prob": 0.1
+    }
+   ]
+  },
+  {
+   "team": "L",
+   "candidates": [
+    {
+     "player_name": "鈴木泰成",
+     "affiliation": "青山学院大",
+     "position": "投手",
+     "prob": 0.25
+    },
+    {
+     "player_name": "米沢友翔",
+     "affiliation": "関西大",
+     "position": "投手",
+     "prob": 0.25
+    },
+    {
+     "player_name": "菰田陽生",
+     "affiliation": "山梨学院高",
+     "position": "投手",
+     "prob": 0.2
+    },
+    {
+     "player_name": "角田楓斗",
+     "affiliation": "富士大",
+     "position": "投手",
+     "prob": 0.15
+    },
+    {
+     "player_name": "宮原廉",
+     "affiliation": "近畿大",
+     "position": "投手",
+     "prob": 0.15
+    }
+   ]
+  },
+  {
+   "team": "M",
+   "candidates": [
+    {
+     "player_name": "菰田陽生",
+     "affiliation": "山梨学院高",
+     "position": "投手",
+     "prob": 0.35
+    },
+    {
+     "player_name": "鈴木泰成",
+     "affiliation": "青山学院大",
+     "position": "投手",
+     "prob": 0.3
+    },
+    {
+     "player_name": "米沢友翔",
+     "affiliation": "関西大",
+     "position": "投手",
+     "prob": 0.25
+    },
+    {
+     "player_name": "星野世那",
+     "affiliation": "大阪商業大",
+     "position": "投手",
+     "prob": 0.1
+    }
+   ]
+  }
+ ],
+ "contested": [
+  {
+   "player_name": "鈴木泰成",
+   "affiliation": "青山学院大",
+   "position": "投手",
+   "num_teams": 6
+  },
+  {
+   "player_name": "菰田陽生",
+   "affiliation": "山梨学院高",
+   "position": "投手",
+   "num_teams": 4
+  },
+  {
+   "player_name": "渡部海",
+   "affiliation": "青山学院大",
+   "position": "捕手",
+   "num_teams": 2
+  }
+ ],
+ "lotte": [
+  {
+   "player_name": "菰田陽生",
+   "affiliation": "山梨学院高",
+   "position": "投手",
+   "round": 1,
+   "reason": "球歴.comのロッテ予想1位は菰田と鈴木泰成で、スカウトも「パワーが違う」と評価している。織田がMLB挑戦を表明した今、競合覚悟で二刀流の大型素材に入札すると見る。",
+   "sources": [
+    "https://www.kyureki.com/draft/yosou/",
+    "https://www.kyureki.com/draft/yosou/marines/"
+   ]
+  },
+  {
+   "player_name": "沢山優介",
+   "affiliation": "ヤマハ",
+   "position": "投手",
+   "round": 2,
+   "reason": "右投手の若手の層に課題があり、2位で即戦力の社会人投手を確保する可能性がある。ロッテ向けの報道は未確認で、楽天の2位予想にも名前がある。",
+   "sources": [
+    "https://www.draft-kaigi.jp/draft-blog/yosou/84141/"
+   ]
+  },
+  {
+   "player_name": "的場吏玖",
+   "affiliation": "天理大",
+   "position": "投手",
+   "round": 3,
+   "reason": "ロッテのスカウト部長が4月のリストアップで評価した選手。上位指名後の即戦力投手枠として有力。",
+   "sources": [
+    "https://www.kyureki.com/draft/yosou/marines/"
+   ]
+  },
+  {
+   "player_name": "野村亮輔",
+   "affiliation": "佛教大",
+   "position": "投手",
+   "round": 4,
+   "reason": "三家スカウトが4月に評価した大学投手で、投手の層を厚くする狙いに合う。",
+   "sources": [
+    "https://www.kyureki.com/draft/yosou/marines/"
+   ]
+  },
+  {
+   "player_name": "前嶋藍",
+   "affiliation": "亜細亜大",
+   "position": "捕手",
+   "round": 5,
+   "reason": "スカウト部長が評価した捕手で、松川に続く捕手層の補強として下位で指名する可能性がある。阪神の外れ1位候補という報道もあり、順位が上がる可能性は残る。",
+   "sources": [
+    "https://www.kyureki.com/draft/yosou/marines/",
+    "https://www.draft-kaigi.jp/"
+   ]
+  }
+ ]
+}
