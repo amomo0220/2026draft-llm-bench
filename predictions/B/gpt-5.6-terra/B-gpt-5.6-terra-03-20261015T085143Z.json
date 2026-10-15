@@ -1,0 +1,347 @@
+{
+ "run_id": "B-gpt-5.6-terra-03-20261015T085143Z",
+ "model_id": "gpt-5.6-terra",
+ "condition": "B",
+ "output": {
+  "first_round": [
+   {
+    "team": "G",
+    "candidates": [
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.45
+     },
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "森 煌誠",
+      "affiliation": "NTT東日本",
+      "position": "投手",
+      "prob": 0.25
+     }
+    ]
+   },
+   {
+    "team": "T",
+    "candidates": [
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "末吉 良丞",
+      "affiliation": "沖縄尚学",
+      "position": "投手",
+      "prob": 0.2
+     }
+    ]
+   },
+   {
+    "team": "DB",
+    "candidates": [
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "池村健太郎",
+      "affiliation": "トヨタ自動車",
+      "position": "投手",
+      "prob": 0.2
+     }
+    ]
+   },
+   {
+    "team": "C",
+    "candidates": [
+     {
+      "player_name": "末吉 良丞",
+      "affiliation": "沖縄尚学",
+      "position": "投手",
+      "prob": 0.4
+     },
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.35
+     },
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.25
+     }
+    ]
+   },
+   {
+    "team": "S",
+    "candidates": [
+     {
+      "player_name": "末吉 良丞",
+      "affiliation": "沖縄尚学",
+      "position": "投手",
+      "prob": 0.45
+     },
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "森 煌誠",
+      "affiliation": "NTT東日本",
+      "position": "投手",
+      "prob": 0.25
+     }
+    ]
+   },
+   {
+    "team": "D",
+    "candidates": [
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.4
+     },
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.35
+     },
+     {
+      "player_name": "沢山優介",
+      "affiliation": "ヤマハ",
+      "position": "投手",
+      "prob": 0.25
+     }
+    ]
+   },
+   {
+    "team": "H",
+    "candidates": [
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.45
+     },
+     {
+      "player_name": "末吉 良丞",
+      "affiliation": "沖縄尚学",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.25
+     }
+    ]
+   },
+   {
+    "team": "F",
+    "candidates": [
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.4
+     },
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.35
+     },
+     {
+      "player_name": "鎌田州真",
+      "affiliation": "徳島インディゴソックス",
+      "position": "投手",
+      "prob": 0.25
+     }
+    ]
+   },
+   {
+    "team": "B",
+    "candidates": [
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.4
+     },
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.35
+     },
+     {
+      "player_name": "池村健太郎",
+      "affiliation": "トヨタ自動車",
+      "position": "投手",
+      "prob": 0.25
+     }
+    ]
+   },
+   {
+    "team": "E",
+    "candidates": [
+     {
+      "player_name": "森 煌誠",
+      "affiliation": "NTT東日本",
+      "position": "投手",
+      "prob": 0.4
+     },
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.35
+     },
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.25
+     }
+    ]
+   },
+   {
+    "team": "L",
+    "candidates": [
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.4
+     },
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.35
+     },
+     {
+      "player_name": "末吉 良丞",
+      "affiliation": "沖縄尚学",
+      "position": "投手",
+      "prob": 0.25
+     }
+    ]
+   },
+   {
+    "team": "M",
+    "candidates": [
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.45
+     },
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "藤澤 涼介",
+      "affiliation": "東京ガス",
+      "position": "外野手",
+      "prob": 0.25
+     }
+    ]
+   }
+  ],
+  "contested": [
+   {
+    "player_name": "菰田 陽生",
+    "affiliation": "山梨学院",
+    "position": "投手",
+    "num_teams": 6
+   },
+   {
+    "player_name": "織田 翔希",
+    "affiliation": "横浜",
+    "position": "投手",
+    "num_teams": 4
+   },
+   {
+    "player_name": "末吉 良丞",
+    "affiliation": "沖縄尚学",
+    "position": "投手",
+    "num_teams": 2
+   }
+  ],
+  "lotte": [
+   {
+    "player_name": "菰田 陽生",
+    "affiliation": "山梨学院",
+    "position": "投手",
+    "round": 1,
+    "reason": "長身から投げ下ろす投球の将来性に加え、打撃も評価できる高校生投手。球団の中長期的な先発投手育成方針に合うと予測する。",
+    "sources": []
+   },
+   {
+    "player_name": "森 煌誠",
+    "affiliation": "NTT東日本",
+    "position": "投手",
+    "round": 2,
+    "reason": "社会人での実戦経験を持つ即戦力候補。先発・救援の両面で投手層を補う指名になる。",
+    "sources": []
+   },
+   {
+    "player_name": "藤澤 涼介",
+    "affiliation": "東京ガス",
+    "position": "外野手",
+    "round": 3,
+    "reason": "社会人で実績を積む外野手で、外野の競争を促せる。走攻守の総合力を評価した指名と予測する。",
+    "sources": []
+   },
+   {
+    "player_name": "杉崎成",
+    "affiliation": "JR東日本",
+    "position": "内野手",
+    "round": 4,
+    "reason": "内野の複数ポジションを担える可能性があり、二遊間を含む層の厚みを確保できる。社会人経験による対応力も見込む。",
+    "sources": []
+   },
+   {
+    "player_name": "伊禮海斗",
+    "affiliation": "オイシックス",
+    "position": "投手",
+    "round": 5,
+    "reason": "二軍参加球団で実戦登板を重ねる投手で、育成途上の素材として評価する。支配下後方順位で投手の選択肢を増やす指名になる。",
+    "sources": []
+   }
+  ]
+ }
+}

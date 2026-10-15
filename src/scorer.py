@@ -213,7 +213,12 @@ def summarize(scores: list[RunScore]) -> list[dict[str, str | int | float]]:
 
 
 def load_predictions(root: Path, include_late: bool) -> list[Prediction]:
-    paths = sorted(p for p in root.rglob("*.json") if include_late or "late" not in p.relative_to(root).parts)
+    # 条件 D の自己検証前の下書き（<run_id>.draft.json）は予測ではないので読まない
+    paths = sorted(
+        p
+        for p in root.rglob("*.json")
+        if not p.name.endswith(".draft.json") and (include_late or "late" not in p.relative_to(root).parts)
+    )
     return [Prediction.model_validate_json(p.read_text(encoding="utf-8")) for p in paths]
 
 

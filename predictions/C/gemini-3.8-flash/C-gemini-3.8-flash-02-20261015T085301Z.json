@@ -1,0 +1,290 @@
+{
+ "run_id": "C-gemini-3.8-flash-02-20261015T085301Z",
+ "model_id": "gemini-3.8-flash",
+ "condition": "C",
+ "output": {
+  "first_round": [
+   {
+    "team": "G",
+    "candidates": [
+     {
+      "player_name": "藤澤涼介",
+      "affiliation": "東京ガス",
+      "position": "外野手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院高",
+      "position": "投手",
+      "prob": 0.4
+     }
+    ]
+   },
+   {
+    "team": "T",
+    "candidates": [
+     {
+      "player_name": "渡部海",
+      "affiliation": "青山学院大",
+      "position": "捕手",
+      "prob": 0.7
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.3
+     }
+    ]
+   },
+   {
+    "team": "DB",
+    "candidates": [
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院高",
+      "position": "投手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.4
+     }
+    ]
+   },
+   {
+    "team": "C",
+    "candidates": [
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院高",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.5
+     }
+    ]
+   },
+   {
+    "team": "S",
+    "candidates": [
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院高",
+      "position": "投手",
+      "prob": 0.5
+     }
+    ]
+   },
+   {
+    "team": "D",
+    "candidates": [
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.7
+     },
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.3
+     }
+    ]
+   },
+   {
+    "team": "H",
+    "candidates": [
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院高",
+      "position": "投手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.4
+     }
+    ]
+   },
+   {
+    "team": "F",
+    "candidates": [
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院高",
+      "position": "投手",
+      "prob": 0.4
+     }
+    ]
+   },
+   {
+    "team": "B",
+    "candidates": [
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院高",
+      "position": "投手",
+      "prob": 0.5
+     }
+    ]
+   },
+   {
+    "team": "E",
+    "candidates": [
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.7
+     },
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.3
+     }
+    ]
+   },
+   {
+    "team": "L",
+    "candidates": [
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院高",
+      "position": "投手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.4
+     }
+    ]
+   },
+   {
+    "team": "M",
+    "candidates": [
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院高",
+      "position": "投手",
+      "prob": 0.4
+     }
+    ]
+   }
+  ],
+  "contested": [
+   {
+    "player_name": "鈴木泰成",
+    "affiliation": "青山学院大",
+    "position": "投手",
+    "num_teams": 5
+   },
+   {
+    "player_name": "菰田陽生",
+    "affiliation": "山梨学院高",
+    "position": "投手",
+    "num_teams": 4
+   },
+   {
+    "player_name": "米沢友翔",
+    "affiliation": "関西大",
+    "position": "投手",
+    "num_teams": 2
+   }
+  ],
+  "lotte": [
+   {
+    "player_name": "鈴木泰成",
+    "affiliation": "青山学院大",
+    "position": "投手",
+    "round": 1,
+    "reason": "世代屈指の完成度と最速154km/hの球威を誇る本格派右腕であり、近年のロッテの最高評価選手へ果敢に入札する方針に合致するため。",
+    "sources": [
+     "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGgK6tRO9cCEMaOJ26GpxhTyScLikuhTaeRcyVfAo4CpICBit0DPBr5K_zsD5WgCjffCRCbxWYH1v6aT-7EaC_bFqaHDJfneqg5p8HFjl29VmAN3wGL0PxtI-6e5J28tfPW",
+     "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFbGkoyw6_yfPcZ7IMMmIsXxakFNSCnDaU663t5AvxmnbGfx44ULTZ7aSXrO9ERDLgPibITNyHdGGq8xUMqwXuxyVBuni1woWAQEp3iZ81mmYeTTNLqJDMXbWLJCv8j4dbL"
+    ]
+   },
+   {
+    "player_name": "渡辺和大",
+    "affiliation": "慶応大",
+    "position": "投手",
+    "round": 2,
+    "reason": "上位ウェーバーを活かして東京六大学屈指の奪三振能力を持つ本格派左腕を確保し、手薄な先発・リリーフ左腕の層を厚くするため。",
+    "sources": [
+     "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGoT_Uik5NNUuXtDBrB4ApdnR0mPWROwIDSOQ8dJZY_u7VvdxI0hp6wbTajbDHVRU7EVEcQTU1oe7Nap7IJ0Co1rD3ahzXQEOeeR6q21DVX8khCBLGfKUpekHFNAU6411NfxHCspctJ",
+     "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEjgF7C7YeHpXguCPd1ffFq8-_QJQEFp7YgQJBwwEM3nf8E8TCue50YB1c2u1VHUhlgV25m2Mb806MgkODg1vUPhhSWc0aBMcN60722vM1FXAzgrrcAYdeM9udxyh7cusxWNrY9"
+    ]
+   },
+   {
+    "player_name": "榊原七斗",
+    "affiliation": "明治大",
+    "position": "外野手",
+    "round": 3,
+    "reason": "外野陣の活性化と走攻守の総合力向上のため、高いコンタクト能力を誇る即戦力外野手を補強するため。",
+    "sources": [
+     "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFtTZdsZBqbBOB2A5Zx3M-6OaJh2CPJCgqlaGz59OAxHf1Hw13hXC5pw6bnn5XygRaNNsBqbQwrgEBmxpHYJHcDKsikRmXtNb8eycdc90BZds68FtHIuafLQbJygSmMUZXtVpLc",
+     "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEjgF7C7YeHpXguCPd1ffFq8-_QJQEFp7YgQJBwwEM3nf8E8TCue50YB1c2u1VHUhlgV25m2Mb806MgkODg1vUPhhSWc0aBMcN60722vM1FXAzgrrcAYdeM9udxyh7cusxWNrY9"
+    ]
+   },
+   {
+    "player_name": "前田侑大",
+    "affiliation": "高岡第一高",
+    "position": "投手",
+    "round": 4,
+    "reason": "将来性豊かな140km/h台中盤の好素材サウスポーを指名し、中長期的なファーム投手育成の基盤を整えるため。",
+    "sources": [
+     "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGM_S0P1omUchBgira5Rh2vT23Qn2z12yHlnh8Uexytwn4g_y3lCQH_3ADKE_gT8Q2vzVWPMzxh8xA5hyvjqpPSMXeWPadlY_QkGRGgh108orObinWxdbsfbQRJIOo=",
+     "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEqYNHYih3ogzOw5ZRuj4tt6qqUJv_bx24UXoCsA8KtLkp6zUQALGRd5aZ_Hrt9V6hT8W5ETGpSR4PvbF2xPLJGF9pUjUKMsHg5ExkPCBirEcHpuFyymAe0T20h"
+    ]
+   },
+   {
+    "player_name": "柿本晟弥",
+    "affiliation": "パナソニック",
+    "position": "投手",
+    "round": 5,
+    "reason": "総合力の高い実戦派右腕を獲得し、ブルペンの層にさらなる厚みと即効性をもたらすため。",
+    "sources": [
+     "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFtTZdsZBqbBOB2A5Zx3M-6OaJh2CPJCgqlaGz59OAxHf1Hw13hXC5pw6bnn5XygRaNNsBqbQwrgEBmxpHYJHcDKsikRmXtNb8eycdc90BZds68FtHIuafLQbJygSmMUZXtVpLc",
+     "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEjgF7C7YeHpXguCPd1ffFq8-_QJQEFp7YgQJBwwEM3nf8E8TCue50YB1c2u1VHUhlgV25m2Mb806MgkODg1vUPhhSWc0aBMcN60722vM1FXAzgrrcAYdeM9udxyh7cusxWNrY9"
+    ]
+   }
+  ]
+ }
+}

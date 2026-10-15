@@ -1,0 +1,436 @@
+{
+ "run_id": "C-claude-sonnet-5-5-02-20261015T085521Z",
+ "model_id": "claude-sonnet-5-5",
+ "condition": "C",
+ "output": {
+  "first_round": [
+   {
+    "team": "G",
+    "candidates": [
+     {
+      "player_name": "渡辺和大",
+      "affiliation": "慶應義塾大",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.25
+     },
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "渡部海",
+      "affiliation": "青山学院大",
+      "position": "捕手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "榊原七斗",
+      "affiliation": "明治大",
+      "position": "外野手",
+      "prob": 0.1
+     }
+    ]
+   },
+   {
+    "team": "T",
+    "candidates": [
+     {
+      "player_name": "渡部海",
+      "affiliation": "青山学院大",
+      "position": "捕手",
+      "prob": 0.85
+     },
+     {
+      "player_name": "前嶋藍",
+      "affiliation": "亜細亜大",
+      "position": "捕手",
+      "prob": 0.15
+     }
+    ]
+   },
+   {
+    "team": "DB",
+    "candidates": [
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.4
+     },
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "宮原廉",
+      "affiliation": "近畿大",
+      "position": "投手",
+      "prob": 0.2
+     }
+    ]
+   },
+   {
+    "team": "C",
+    "candidates": [
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "宮原廉",
+      "affiliation": "近畿大",
+      "position": "投手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "角田楓斗",
+      "affiliation": "富士大",
+      "position": "投手",
+      "prob": 0.1
+     },
+     {
+      "player_name": "渡部海",
+      "affiliation": "青山学院大",
+      "position": "捕手",
+      "prob": 0.1
+     }
+    ]
+   },
+   {
+    "team": "S",
+    "candidates": [
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.55
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "宮原廉",
+      "affiliation": "近畿大",
+      "position": "投手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "渡部海",
+      "affiliation": "青山学院大",
+      "position": "捕手",
+      "prob": 0.1
+     }
+    ]
+   },
+   {
+    "team": "D",
+    "candidates": [
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "宮原廉",
+      "affiliation": "近畿大",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "渡部海",
+      "affiliation": "青山学院大",
+      "position": "捕手",
+      "prob": 0.1
+     }
+    ]
+   },
+   {
+    "team": "H",
+    "candidates": [
+     {
+      "player_name": "渡部海",
+      "affiliation": "青山学院大",
+      "position": "捕手",
+      "prob": 0.25
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.25
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "角田楓斗",
+      "affiliation": "富士大",
+      "position": "投手",
+      "prob": 0.1
+     }
+    ]
+   },
+   {
+    "team": "F",
+    "candidates": [
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.4
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "宮原廉",
+      "affiliation": "近畿大",
+      "position": "投手",
+      "prob": 0.2
+     }
+    ]
+   },
+   {
+    "team": "B",
+    "candidates": [
+     {
+      "player_name": "渡部海",
+      "affiliation": "青山学院大",
+      "position": "捕手",
+      "prob": 0.35
+     },
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.35
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "宮原廉",
+      "affiliation": "近畿大",
+      "position": "投手",
+      "prob": 0.15
+     }
+    ]
+   },
+   {
+    "team": "E",
+    "candidates": [
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.4
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.35
+     },
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.25
+     }
+    ]
+   },
+   {
+    "team": "L",
+    "candidates": [
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.35
+     },
+     {
+      "player_name": "角田楓斗",
+      "affiliation": "富士大",
+      "position": "投手",
+      "prob": 0.35
+     },
+     {
+      "player_name": "渡部海",
+      "affiliation": "青山学院大",
+      "position": "捕手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.15
+     }
+    ]
+   },
+   {
+    "team": "M",
+    "candidates": [
+     {
+      "player_name": "米沢友翔",
+      "affiliation": "関西大",
+      "position": "投手",
+      "prob": 0.4
+     },
+     {
+      "player_name": "宮原廉",
+      "affiliation": "近畿大",
+      "position": "投手",
+      "prob": 0.25
+     },
+     {
+      "player_name": "鈴木泰成",
+      "affiliation": "青山学院大",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.15
+     }
+    ]
+   }
+  ],
+  "contested": [
+   {
+    "player_name": "米沢友翔",
+    "affiliation": "関西大",
+    "position": "投手",
+    "num_teams": 5
+   },
+   {
+    "player_name": "鈴木泰成",
+    "affiliation": "青山学院大",
+    "position": "投手",
+    "num_teams": 5
+   },
+   {
+    "player_name": "渡部海",
+    "affiliation": "青山学院大",
+    "position": "捕手",
+    "num_teams": 3
+   },
+   {
+    "player_name": "菰田陽生",
+    "affiliation": "山梨学院",
+    "position": "投手",
+    "num_teams": 3
+   }
+  ],
+  "lotte": [
+   {
+    "player_name": "米沢友翔",
+    "affiliation": "関西大",
+    "position": "投手",
+    "round": 1,
+    "reason": "織田翔希がMLB挑戦を表明したため、1位候補の中心は大学生の即戦力投手になる。米沢はスポーツナビでS評価の左腕で、民間予想ではロッテの1位候補にも挙がっている。",
+    "sources": [
+     "https://sports.yahoo.co.jp/official/detail/2026100500051-spnaviow",
+     "https://dorafuto-stadium.com/dorafutoyosou-saisin-information/"
+    ]
+   },
+   {
+    "player_name": "榊原七斗",
+    "affiliation": "明治大",
+    "position": "外野手",
+    "round": 2,
+    "reason": "スポーツナビでA評価の大学生外野手で、1位競合を外れた場合の野手の上位候補になる。投手に偏らないよう野手を確保する狙い。",
+    "sources": [
+     "https://sports.yahoo.co.jp/official/detail/2026100500051-spnaviow"
+    ]
+   },
+   {
+    "player_name": "沢山優介",
+    "affiliation": "ヤマハ",
+    "position": "投手",
+    "round": 3,
+    "reason": "球歴.comの球団別予想でロッテの上位候補に挙がる社会人投手。即戦力の投手層を厚くする指名になる。",
+    "sources": [
+     "https://kyureki.com/draft/yosou"
+    ]
+   },
+   {
+    "player_name": "野村亮輔",
+    "affiliation": "佛教大",
+    "position": "投手",
+    "round": 4,
+    "reason": "三家和真スカウトが「球が強く、制球力や変化球もよい」と評価しており、球歴.comの予想でも上位候補。",
+    "sources": [
+     "https://kyureki.com/draft/yosou"
+    ]
+   },
+   {
+    "player_name": "落合智哉",
+    "affiliation": "立教大",
+    "position": "捕手",
+    "round": 5,
+    "reason": "プロ志望届を提出済みの大学生捕手で、下位での捕手の層の補強として予想する。球団側の評価は未確認なので推測を含む。",
+    "sources": [
+     "https://www.daily.co.jp/baseball/2026/09/08/0020796602.shtml"
+    ]
+   }
+  ]
+ }
+}

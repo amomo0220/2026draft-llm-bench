@@ -1,0 +1,303 @@
+{
+ "run_id": "C-gemini-3.8-flash-03-20261015T085421Z",
+ "model_id": "gemini-3.8-flash",
+ "condition": "C",
+ "output": {
+  "first_round": [
+   {
+    "team": "G",
+    "candidates": [
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院高校",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "藤澤 涼介",
+      "affiliation": "東京ガス",
+      "position": "外野手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "宮原 廉",
+      "affiliation": "近畿大学",
+      "position": "投手",
+      "prob": 0.2
+     }
+    ]
+   },
+   {
+    "team": "T",
+    "candidates": [
+     {
+      "player_name": "渡部 海",
+      "affiliation": "青山学院大学",
+      "position": "捕手",
+      "prob": 0.7
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.3
+     }
+    ]
+   },
+   {
+    "team": "DB",
+    "candidates": [
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院高校",
+      "position": "投手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.4
+     }
+    ]
+   },
+   {
+    "team": "C",
+    "candidates": [
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院高校",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.5
+     }
+    ]
+   },
+   {
+    "team": "S",
+    "candidates": [
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院高校",
+      "position": "投手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.4
+     }
+    ]
+   },
+   {
+    "team": "D",
+    "candidates": [
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.8
+     },
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院高校",
+      "position": "投手",
+      "prob": 0.2
+     }
+    ]
+   },
+   {
+    "team": "H",
+    "candidates": [
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院高校",
+      "position": "投手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.4
+     }
+    ]
+   },
+   {
+    "team": "F",
+    "candidates": [
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院高校",
+      "position": "投手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.4
+     }
+    ]
+   },
+   {
+    "team": "B",
+    "candidates": [
+     {
+      "player_name": "有馬 伽久",
+      "affiliation": "立命館大学",
+      "position": "投手",
+      "prob": 0.7
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.3
+     }
+    ]
+   },
+   {
+    "team": "E",
+    "candidates": [
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.7
+     },
+     {
+      "player_name": "前田 侑大",
+      "affiliation": "高岡第一高校",
+      "position": "投手",
+      "prob": 0.3
+     }
+    ]
+   },
+   {
+    "team": "L",
+    "candidates": [
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院高校",
+      "position": "投手",
+      "prob": 0.8
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.2
+     }
+    ]
+   },
+   {
+    "team": "M",
+    "candidates": [
+     {
+      "player_name": "有馬 伽久",
+      "affiliation": "立命館大学",
+      "position": "投手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院高校",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "藤澤 涼介",
+      "affiliation": "東京ガス",
+      "position": "外野手",
+      "prob": 0.2
+     }
+    ]
+   }
+  ],
+  "contested": [
+   {
+    "player_name": "菰田 陽生",
+    "affiliation": "山梨学院高校",
+    "position": "投手",
+    "num_teams": 6
+   },
+   {
+    "player_name": "鈴木 泰成",
+    "affiliation": "青山学院大学",
+    "position": "投手",
+    "num_teams": 3
+   },
+   {
+    "player_name": "有馬 伽久",
+    "affiliation": "立命館大学",
+    "position": "投手",
+    "num_teams": 2
+   }
+  ],
+  "lotte": [
+   {
+    "player_name": "有馬 伽久",
+    "affiliation": "立命館大学",
+    "position": "投手",
+    "round": 1,
+    "reason": "先発投手陣の柱となる左腕の補強が急務であり、高い奪三振能力と完成度を誇る大学屈指の即戦力左腕として1位入札が狙い目となるため。",
+    "sources": [
+     "https://sports.yahoo.co.jp/official/detail/2026101400015-spnavi/",
+     "https://sportiva.shueisha.co.jp/clm/baseball/npb/2026/10/05/post_81/",
+     "https://note.com/chiba_lotte_analysis/n/n4c9a89d7b5f1"
+    ]
+   },
+   {
+    "player_name": "沢山 優介",
+    "affiliation": "ヤマハ",
+    "position": "投手",
+    "round": 2,
+    "reason": "先発ローテーション再構築に向け、187cmの大型で最速151キロを投げる即戦力左腕を確保するため。",
+    "sources": [
+     "https://sports.yahoo.co.jp/official/detail/2026101400015-spnavi/",
+     "https://note.com/chiba_lotte_analysis/n/n4c9a89d7b5f1"
+    ]
+   },
+   {
+    "player_name": "柴崎 聖人",
+    "affiliation": "王子",
+    "position": "外野手",
+    "round": 3,
+    "reason": "将来の打線の中軸を担える強打型外野手として社会人で高評価を得ている長打力のある野手を補強するため。",
+    "sources": [
+     "https://sports.yahoo.co.jp/official/detail/2026101400015-spnavi/",
+     "https://note.com/chiba_lotte_analysis/n/n4c9a89d7b5f1"
+    ]
+   },
+   {
+    "player_name": "半杭 奏太",
+    "affiliation": "東京農業大学第二高校",
+    "position": "内野手",
+    "round": 4,
+    "reason": "3〜5年後を見据えた二遊間の世代交代候補として、強肩強打を誇る大型高校生遊撃手を獲得するため。",
+    "sources": [
+     "https://sports.yahoo.co.jp/official/detail/2026101400015-spnavi/",
+     "https://note.com/chiba_lotte_analysis/n/n4c9a89d7b5f1"
+    ]
+   },
+   {
+    "player_name": "近藤 琉唯斗",
+    "affiliation": "小樽双葉高校",
+    "position": "投手",
+    "round": 5,
+    "reason": "最速152キロの速球と鋭いスライダーを武器とする素材型パワーピッチャーを確保し、将来のエース候補として育成するため。",
+    "sources": [
+     "https://sportiva.shueisha.co.jp/clm/baseball/npb/2026/10/05/post_81/",
+     "https://note.com/chiba_lotte_analysis/n/n4c9a89d7b5f1"
+    ]
+   }
+  ]
+ }
+}

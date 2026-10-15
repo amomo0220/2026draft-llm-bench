@@ -1,0 +1,328 @@
+{
+ "first_round": [
+  {
+   "team": "G",
+   "candidates": [
+    {
+     "player_name": "菰田 陽生",
+     "affiliation": "山梨学院高校",
+     "position": "内野手",
+     "prob": 0.7
+    },
+    {
+     "player_name": "藤澤 涼介",
+     "affiliation": "東京ガス",
+     "position": "外野手",
+     "prob": 0.2
+    },
+    {
+     "player_name": "鈴木 泰成",
+     "affiliation": "青山学院大学",
+     "position": "投手",
+     "prob": 0.1
+    }
+   ]
+  },
+  {
+   "team": "T",
+   "candidates": [
+    {
+     "player_name": "渡部 海",
+     "affiliation": "青山学院大学",
+     "position": "捕手",
+     "prob": 0.8
+    },
+    {
+     "player_name": "前嶋 藍",
+     "affiliation": "亜細亜大学",
+     "position": "捕手",
+     "prob": 0.2
+    }
+   ]
+  },
+  {
+   "team": "DB",
+   "candidates": [
+    {
+     "player_name": "菰田 陽生",
+     "affiliation": "山梨学院高校",
+     "position": "内野手",
+     "prob": 0.5
+    },
+    {
+     "player_name": "米沢 友翔",
+     "affiliation": "関西大学",
+     "position": "投手",
+     "prob": 0.3
+    },
+    {
+     "player_name": "渡辺 和大",
+     "affiliation": "慶應義塾大学",
+     "position": "投手",
+     "prob": 0.2
+    }
+   ]
+  },
+  {
+   "team": "C",
+   "candidates": [
+    {
+     "player_name": "鈴木 泰成",
+     "affiliation": "青山学院大学",
+     "position": "投手",
+     "prob": 0.5
+    },
+    {
+     "player_name": "宮原 廉",
+     "affiliation": "近畿大学",
+     "position": "投手",
+     "prob": 0.5
+    }
+   ]
+  },
+  {
+   "team": "S",
+   "candidates": [
+    {
+     "player_name": "菰田 陽生",
+     "affiliation": "山梨学院高校",
+     "position": "内野手",
+     "prob": 0.6
+    },
+    {
+     "player_name": "鈴木 泰成",
+     "affiliation": "青山学院大学",
+     "position": "投手",
+     "prob": 0.4
+    }
+   ]
+  },
+  {
+   "team": "D",
+   "candidates": [
+    {
+     "player_name": "鈴木 泰成",
+     "affiliation": "青山学院大学",
+     "position": "投手",
+     "prob": 0.6
+    },
+    {
+     "player_name": "渡部 海",
+     "affiliation": "青山学院大学",
+     "position": "捕手",
+     "prob": 0.2
+    },
+    {
+     "player_name": "菰田 陽生",
+     "affiliation": "山梨学院高校",
+     "position": "内野手",
+     "prob": 0.2
+    }
+   ]
+  },
+  {
+   "team": "H",
+   "candidates": [
+    {
+     "player_name": "菰田 陽生",
+     "affiliation": "山梨学院高校",
+     "position": "内野手",
+     "prob": 0.6
+    },
+    {
+     "player_name": "鈴木 泰成",
+     "affiliation": "青山学院大学",
+     "position": "投手",
+     "prob": 0.4
+    }
+   ]
+  },
+  {
+   "team": "F",
+   "candidates": [
+    {
+     "player_name": "織田 翔希",
+     "affiliation": "横浜高校",
+     "position": "投手",
+     "prob": 0.5
+    },
+    {
+     "player_name": "菰田 陽生",
+     "affiliation": "山梨学院高校",
+     "position": "内野手",
+     "prob": 0.3
+    },
+    {
+     "player_name": "鈴木 泰成",
+     "affiliation": "青山学院大学",
+     "position": "投手",
+     "prob": 0.2
+    }
+   ]
+  },
+  {
+   "team": "B",
+   "candidates": [
+    {
+     "player_name": "有馬 伽久",
+     "affiliation": "立命館大学",
+     "position": "投手",
+     "prob": 0.5
+    },
+    {
+     "player_name": "宮原 廉",
+     "affiliation": "近畿大学",
+     "position": "投手",
+     "prob": 0.3
+    },
+    {
+     "player_name": "鈴木 泰成",
+     "affiliation": "青山学院大学",
+     "position": "投手",
+     "prob": 0.2
+    }
+   ]
+  },
+  {
+   "team": "E",
+   "candidates": [
+    {
+     "player_name": "渡部 海",
+     "affiliation": "青山学院大学",
+     "position": "捕手",
+     "prob": 0.6
+    },
+    {
+     "player_name": "鈴木 泰成",
+     "affiliation": "青山学院大学",
+     "position": "投手",
+     "prob": 0.4
+    }
+   ]
+  },
+  {
+   "team": "L",
+   "candidates": [
+    {
+     "player_name": "菰田 陽生",
+     "affiliation": "山梨学院高校",
+     "position": "内野手",
+     "prob": 0.6
+    },
+    {
+     "player_name": "米沢 友翔",
+     "affiliation": "関西大学",
+     "position": "投手",
+     "prob": 0.2
+    },
+    {
+     "player_name": "藤澤 涼介",
+     "affiliation": "東京ガス",
+     "position": "外野手",
+     "prob": 0.2
+    }
+   ]
+  },
+  {
+   "team": "M",
+   "candidates": [
+    {
+     "player_name": "鈴木 泰成",
+     "affiliation": "青山学院大学",
+     "position": "投手",
+     "prob": 0.6
+    },
+    {
+     "player_name": "有馬 伽久",
+     "affiliation": "立命館大学",
+     "position": "投手",
+     "prob": 0.2
+    },
+    {
+     "player_name": "前田 侑大",
+     "affiliation": "高岡第一高校",
+     "position": "投手",
+     "prob": 0.2
+    }
+   ]
+  }
+ ],
+ "contested": [
+  {
+   "player_name": "菰田 陽生",
+   "affiliation": "山梨学院高校",
+   "position": "内野手",
+   "num_teams": 4
+  },
+  {
+   "player_name": "鈴木 泰成",
+   "affiliation": "青山学院大学",
+   "position": "投手",
+   "num_teams": 3
+  },
+  {
+   "player_name": "渡部 海",
+   "affiliation": "青山学院大学",
+   "position": "捕手",
+   "num_teams": 2
+  }
+ ],
+ "lotte": [
+  {
+   "player_name": "鈴木 泰成",
+   "affiliation": "青山学院大学",
+   "position": "投手",
+   "round": 1,
+   "reason": "先発陣のイニング消化能力不足と奪三振力不足が喫緊の課題であり、即戦力ローテーションの柱として期待できる大学No.1本格派右腕の入札に向かう。",
+   "sources": [
+    "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGk4DAo_r-7VAABjyl56TFxnQz3QMD3i8ZbizB6D877V8dFXajmxid53H2MbVgNIl9-9RdOG3v6DjUIlRkASUabIwpNT9wudrZxeQadD3OblEsh6GRLARHIAqn4d6S8-SeDt9odM7A=",
+    "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHduEBkbUMTQxUnBYj4Vow01_8e1UTomJXt1MgyStEBhxLF__LS9yPiVJ4SXsRm3gh4CEv5nBhK91QsCuaNTT-1fbwists6jFgGfbTSav6EgQVToi6lKx0Np7R7FrNAJxWXRPo=",
+    "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE8GIamduqd-eugnBJsnuZWDMd22AzFVXMp0-2U3UnA6oxVuisalhTjbxERX-ZyOAkA3MSDmJO5RUIY0o4Ms2JmHxLYXo5MhwHkRHYxcNRhBNY1z2DWlY3wnL37RxBv3RJWvGsWRA="
+   ]
+  },
+  {
+   "player_name": "池田 聖摩",
+   "affiliation": "横浜高校",
+   "position": "内野手",
+   "round": 2,
+   "reason": "支配下25歳以下の内野手が極端に不足しているため、2巡目の早いウェーバーを活かして次世代の二遊間を担える超高校級遊撃手を指名する。",
+   "sources": [
+    "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF0b_YqG_qAxr-2nNRWMKp78dw7ws9NDfCNY0hdcGen_HNeP8B6S-q3q30FKxtWKdRVhklIftzj6cw-llkgjVPygB-PhcRRLu34N1psf9l4oJBKgrEiH4gRYa0KnkWZ0Q==",
+    "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHRCPOVAEKLuC6o8EJIrABTjTlmlwgczHbWMmx9yEubmatNIb5RuaEqoXB7IcdfrFA3-W1q5Jt9-N-a3QV08mMuH28xf1L-4LPo2XOfm0NFm7TOs68GeTDjlckLcfFQpy0V7yvO_f3cbSiKfeY9QlRfo3CoU8a6-w==",
+    "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGB_bFgQYeNPvkpIHp00r8GZLIdNRCqCYLFzArB3hGYDZoFKT9J3rwJMwtU3L7HWtwvr_tex1lGgKcbBjzWzFGRZL-dWWomJFA9Yr6bBmZJqVdqxtT4NQCF-VMbkkcfQb4S"
+   ]
+  },
+  {
+   "player_name": "平田 玲翔",
+   "affiliation": "大分商高校",
+   "position": "投手",
+   "round": 3,
+   "reason": "近年成果を挙げている高卒投手の育成方針に合致し、体格と将来性に優れた最速151km/hの本格派大型右腕を確保する。",
+   "sources": [
+    "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHjANORmI9_IZjM4B8iVzC7a1P0huKGq3sy93aEdwEYqcoh3-UKCZwF7JZaw3QAwA8v4ZM-T-ddyYzWBkSyjeH3f4B-ZxIv8VjnalQPZ33v6lIIdpkmzO6qpMYGnl20WUR8Uqpn5s_HoWMMWEdL8xVVvJ8LKwRcxVupSlDDqzgPtmnpQJEy2SHbis918DI7jlrwiIZGTeXl_xwIT6Zl4m9jKaveTzSDP30tfPkT8KMIGgZ1y3d6UKV6RCXEbypfN1M="
+   ]
+  },
+  {
+   "player_name": "角田 楓斗",
+   "affiliation": "富士大学",
+   "position": "投手",
+   "round": 4,
+   "reason": "手薄な投手陣の層を厚くするため、最速153km/hの球威を誇るパワーピッチャーを獲得してブルペン強化を図る。",
+   "sources": [
+    "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF02ZI6YO7Z97EBYcfISTR7y9VqPkW3PoqJOe_H424Py2tsXNPed8lBh_rmgZpf6z32Cs3XRZB-2rwcv5Gz-ovn3rK68r6QnKegixDnatxy2TIdyE3mGoLB6t5y0e5bp3VY",
+    "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG4mU6rgb6QtZm8enYpF6cLUrcKLeLV5opBe-qcXZ1h4up1j3Ujng4IjmOmbLnbj1oKMnqT5S6QEmTSAaLqpWQuu2IAGG-W5hwI9zqDuSOQEJpfITGr5D7bZeWkfug_xsKB9q50oVHCZj2-6OyUd6mrnv79Pz0K2A=="
+   ]
+  },
+  {
+   "player_name": "榊原 七斗",
+   "affiliation": "明治大学",
+   "position": "外野手",
+   "round": 5,
+   "reason": "リーグワーストのチーム打率・出塁率の底上げに向けて、走攻守の総合力が高く出塁能力に優れた東京六大学屈指の外野手を指名する。",
+   "sources": [
+    "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGk4DAo_r-7VAABjyl56TFxnQz3QMD3i8ZbizB6D877V8dFXajmxid53H2MbVgNIl9-9RdOG3v6DjUIlRkASUabIwpNT9wudrZxeQadD3OblEsh6GRLARHIAqn4d6S8-SeDt9odM7A=",
+    "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFYlFkT8LJ0Wr0n8w4R1MxKXAHxMxq_f0MJqBh1-PWnK_dakmn4ofEdf67fiQmHZANr1wn6xNbuzIpopjpZwyohELCb63jYC4_ZAbrAlrLQtjslnmVQ13vYIGdp4T5xVNxtPZ0="
+   ]
+  }
+ ]
+}

@@ -21,12 +21,14 @@ MAX_CONTINUATIONS = 5  # サーバー側の検索ループが pause_turn で止�
 def _paused(msg: Any) -> bool:
     """サーバー側の検索ループの途中で止まったか。
 
-    pause_turn のほか、クライアント側のツールを渡していないのに tool_use で止まり、最後のブロックが
-    結果のないサーバー側ツールの呼び出しだった場合も、同じく送り返せば再開できるとみなす（試行で1回観測）。
+    pause_turn のほか、クライアント側のツールの呼び出しがないのに tool_use で止まり、最後のブロックが
+    結果のないサーバー側ツールの呼び出し（試行で1回観測）か思考（本番の条件 D で1回観測）だった場合も、
+    同じく送り返せば再開できるとみなす。最後が本文（text）なら回答を書き終えたとみなして再開しない。
     """
     if msg.stop_reason == "pause_turn":
         return True
-    return msg.stop_reason == "tool_use" and bool(msg.content) and msg.content[-1].type == "server_tool_use"
+    resumable = ("server_tool_use", "thinking", "redacted_thinking")
+    return msg.stop_reason == "tool_use" and bool(msg.content) and msg.content[-1].type in resumable
 
 
 def _append_assistant(messages: list[dict[str, Any]], content: list[Any]) -> None:
@@ -85,8 +87,8 @@ def call(
     # 引用付きの回答はテキストブロックが分割されるので連結する。最終の JSON は最後のテキストに入る
     text = "".join(b.text for b in msg.content if b.type == "text")
     stop = msg.stop_reason
-    if stop != "end_turn" and msg.content:  # 想定外の停止の原因を追えるよう、最後のブロックの種類も残す
-        stop = f"{stop}(last={msg.content[-1].type})"
+    if stop != "end_turn" and msg.content:  # 想定外の停止の原因を追えるよう、最後のブロックの種類と往復の回数も残す
+        stop = f"{stop}(last={msg.content[-1].type}, turns={turns}, continuations={continuations})"
     return RunnerResult(
         text=text,
         input_tokens=in_tok,

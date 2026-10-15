@@ -211,3 +211,17 @@ def test_cli_no_predictions(tmp_path: Path) -> None:
     actual.write_text(json.dumps(actual_payload(), ensure_ascii=False), encoding="utf-8")
     (tmp_path / "predictions").mkdir()
     assert main(["--actual", str(actual), "--predictions", str(tmp_path / "predictions")]) == 1
+
+
+def test_load_predictions_skips_drafts_and_late(tmp_path) -> None:
+    from src.scorer import load_predictions
+
+    out = tmp_path / "D" / "m"
+    out.mkdir(parents=True)
+    pred = Prediction.model_validate(prediction_payload("D-m-01", "m", "D"))
+    (out / "D-m-01.json").write_text(pred.model_dump_json(), encoding="utf-8")
+    (out / "D-m-01.draft.json").write_text(pred.output.model_dump_json(), encoding="utf-8")  # 自己検証前の下書き
+    (tmp_path / "late").mkdir()
+    (tmp_path / "late" / "x.json").write_text(pred.model_dump_json(), encoding="utf-8")
+    assert [p.run_id for p in load_predictions(tmp_path, include_late=False)] == ["D-m-01"]
+    assert len(load_predictions(tmp_path, include_late=True)) == 2

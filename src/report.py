@@ -34,7 +34,7 @@ TEAM_NAMES = {
 # 記事に載せる順（セ・リーグ → パ・リーグ）
 TEAM_ORDER = [TeamCode.G, TeamCode.T, TeamCode.DB, TeamCode.C, TeamCode.S, TeamCode.D,
               TeamCode.H, TeamCode.F, TeamCode.B, TeamCode.E, TeamCode.L, TeamCode.M]  # fmt: skip
-CONDITION_NAMES = {"A": "情報なし", "B": "候補者名簿のみ", "C": "Web検索", "D": "エージェント"}
+CONDITION_NAMES = {"A": "情報なし", "B": "記憶＋名簿", "C": "Web検索", "D": "エージェント"}
 MODEL_LABELS = {"claude-sonnet-5-5": "Claude Sonnet 5.5", "gpt-5.6-terra": "GPT-5.6 Terra", "gemini-3.8-flash": "Gemini 3.8 Flash"}
 
 

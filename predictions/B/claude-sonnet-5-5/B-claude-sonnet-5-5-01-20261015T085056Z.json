@@ -1,0 +1,497 @@
+{
+ "run_id": "B-claude-sonnet-5-5-01-20261015T085056Z",
+ "model_id": "claude-sonnet-5-5",
+ "condition": "B",
+ "output": {
+  "first_round": [
+   {
+    "team": "G",
+    "candidates": [
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.4
+     },
+     {
+      "player_name": "池田 聖摩",
+      "affiliation": "横浜",
+      "position": "内野手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "渡部 海",
+      "affiliation": "青山学院大学",
+      "position": "捕手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "末吉 良丞",
+      "affiliation": "沖縄尚学",
+      "position": "投手",
+      "prob": 0.1
+     }
+    ]
+   },
+   {
+    "team": "T",
+    "candidates": [
+     {
+      "player_name": "池田 聖摩",
+      "affiliation": "横浜",
+      "position": "内野手",
+      "prob": 0.35
+     },
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "藤森 康淳",
+      "affiliation": "法政大学",
+      "position": "内野手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.1
+     },
+     {
+      "player_name": "宮城 誇南",
+      "affiliation": "早稲田大学",
+      "position": "外野手",
+      "prob": 0.1
+     }
+    ]
+   },
+   {
+    "team": "DB",
+    "candidates": [
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.4
+     },
+     {
+      "player_name": "池田 聖摩",
+      "affiliation": "横浜",
+      "position": "内野手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "渡部 海",
+      "affiliation": "青山学院大学",
+      "position": "捕手",
+      "prob": 0.15
+     }
+    ]
+   },
+   {
+    "team": "C",
+    "candidates": [
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "池田 聖摩",
+      "affiliation": "横浜",
+      "position": "内野手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "渡部 海",
+      "affiliation": "青山学院大学",
+      "position": "捕手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "末吉 良丞",
+      "affiliation": "沖縄尚学",
+      "position": "投手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.15
+     }
+    ]
+   },
+   {
+    "team": "S",
+    "candidates": [
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "末吉 良丞",
+      "affiliation": "沖縄尚学",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "渡部 海",
+      "affiliation": "青山学院大学",
+      "position": "捕手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "池田 聖摩",
+      "affiliation": "横浜",
+      "position": "内野手",
+      "prob": 0.15
+     }
+    ]
+   },
+   {
+    "team": "D",
+    "candidates": [
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "池田 聖摩",
+      "affiliation": "横浜",
+      "position": "内野手",
+      "prob": 0.25
+     },
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "渡部 海",
+      "affiliation": "青山学院大学",
+      "position": "捕手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "末吉 良丞",
+      "affiliation": "沖縄尚学",
+      "position": "投手",
+      "prob": 0.15
+     }
+    ]
+   },
+   {
+    "team": "H",
+    "candidates": [
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.25
+     },
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.25
+     },
+     {
+      "player_name": "池田 聖摩",
+      "affiliation": "横浜",
+      "position": "内野手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "末吉 良丞",
+      "affiliation": "沖縄尚学",
+      "position": "投手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "仲井 慎",
+      "affiliation": "駒澤大学",
+      "position": "投手",
+      "prob": 0.15
+     }
+    ]
+   },
+   {
+    "team": "F",
+    "candidates": [
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "末吉 良丞",
+      "affiliation": "沖縄尚学",
+      "position": "投手",
+      "prob": 0.25
+     },
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "池田 聖摩",
+      "affiliation": "横浜",
+      "position": "内野手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.1
+     }
+    ]
+   },
+   {
+    "team": "B",
+    "candidates": [
+     {
+      "player_name": "末吉 良丞",
+      "affiliation": "沖縄尚学",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.25
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "渡部 海",
+      "affiliation": "青山学院大学",
+      "position": "捕手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "池田 聖摩",
+      "affiliation": "横浜",
+      "position": "内野手",
+      "prob": 0.1
+     }
+    ]
+   },
+   {
+    "team": "E",
+    "candidates": [
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "池田 聖摩",
+      "affiliation": "横浜",
+      "position": "内野手",
+      "prob": 0.25
+     },
+     {
+      "player_name": "末吉 良丞",
+      "affiliation": "沖縄尚学",
+      "position": "投手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "渡部 海",
+      "affiliation": "青山学院大学",
+      "position": "捕手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.15
+     }
+    ]
+   },
+   {
+    "team": "L",
+    "candidates": [
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "末吉 良丞",
+      "affiliation": "沖縄尚学",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "菰田 陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "渡部 海",
+      "affiliation": "青山学院大学",
+      "position": "捕手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.15
+     }
+    ]
+   },
+   {
+    "team": "M",
+    "candidates": [
+     {
+      "player_name": "織田 翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "池田 聖摩",
+      "affiliation": "横浜",
+      "position": "内野手",
+      "prob": 0.25
+     },
+     {
+      "player_name": "渡部 海",
+      "affiliation": "青山学院大学",
+      "position": "捕手",
+      "prob": 0.2
+     },
+     {
+      "player_name": "末吉 良丞",
+      "affiliation": "沖縄尚学",
+      "position": "投手",
+      "prob": 0.15
+     },
+     {
+      "player_name": "鈴木 泰成",
+      "affiliation": "青山学院大学",
+      "position": "投手",
+      "prob": 0.1
+     }
+    ]
+   }
+  ],
+  "contested": [
+   {
+    "player_name": "織田 翔希",
+    "affiliation": "横浜",
+    "position": "投手",
+    "num_teams": 10
+   },
+   {
+    "player_name": "池田 聖摩",
+    "affiliation": "横浜",
+    "position": "内野手",
+    "num_teams": 5
+   },
+   {
+    "player_name": "末吉 良丞",
+    "affiliation": "沖縄尚学",
+    "position": "投手",
+    "num_teams": 4
+   },
+   {
+    "player_name": "渡部 海",
+    "affiliation": "青山学院大学",
+    "position": "捕手",
+    "num_teams": 3
+   },
+   {
+    "player_name": "鈴木 泰成",
+    "affiliation": "青山学院大学",
+    "position": "投手",
+    "num_teams": 2
+   }
+  ],
+  "lotte": [
+   {
+    "player_name": "織田 翔希",
+    "affiliation": "横浜",
+    "position": "投手",
+    "round": 1,
+    "reason": "高校生No.1級の右腕で、将来のエース候補を狙うロッテは例年どおり最上位評価の選手に入札すると見る。競合は必至だが、方針は変えにくい。",
+    "sources": []
+   },
+   {
+    "player_name": "森 煌誠",
+    "affiliation": "NTT東日本",
+    "position": "投手",
+    "round": 2,
+    "reason": "即戦力の先発・中継ぎ候補として、投手陣の層を厚くする狙い。社会人の即戦力投手は2位で消える可能性が高く、早めに確保すると見る。",
+    "sources": []
+   },
+   {
+    "player_name": "佐々木 大輔",
+    "affiliation": "東邦ガス",
+    "position": "内野手",
+    "round": 3,
+    "reason": "遊撃を守れる社会人内野手で、内野の守備力と世代交代に備える補強として妥当。",
+    "sources": []
+   },
+   {
+    "player_name": "藤澤 涼介",
+    "affiliation": "東京ガス",
+    "position": "外野手",
+    "round": 4,
+    "reason": "外野の層を厚くする即戦力型の野手候補。打力と走力で上位指名の穴を埋める。",
+    "sources": []
+   },
+   {
+    "player_name": "後藤 凌寿",
+    "affiliation": "トヨタ自動車",
+    "position": "投手",
+    "round": 5,
+    "reason": "社会人の即戦力右腕で、リリーフの補強として下位で指名する可能性がある。",
+    "sources": []
+   }
+  ]
+ }
+}
