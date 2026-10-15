@@ -1,0 +1,341 @@
+{
+ "run_id": "B-gpt-5.6-terra-01-20261015T085055Z",
+ "model_id": "gpt-5.6-terra",
+ "condition": "B",
+ "output": {
+  "first_round": [
+   {
+    "team": "G",
+    "candidates": [
+     {
+      "player_name": "織田翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.55
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "森煌誠",
+      "affiliation": "NTT東日本",
+      "position": "投手",
+      "prob": 0.15
+     }
+    ]
+   },
+   {
+    "team": "T",
+    "candidates": [
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "織田翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "中西佳虎",
+      "affiliation": "大阪桐蔭",
+      "position": "捕手",
+      "prob": 0.2
+     }
+    ]
+   },
+   {
+    "team": "DB",
+    "candidates": [
+     {
+      "player_name": "織田翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.25
+     },
+     {
+      "player_name": "藤澤涼介",
+      "affiliation": "東京ガス",
+      "position": "外野手",
+      "prob": 0.15
+     }
+    ]
+   },
+   {
+    "team": "C",
+    "candidates": [
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.45
+     },
+     {
+      "player_name": "織田翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "西田櫂吏",
+      "affiliation": "京都国際",
+      "position": "投手",
+      "prob": 0.25
+     }
+    ]
+   },
+   {
+    "team": "S",
+    "candidates": [
+     {
+      "player_name": "織田翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.45
+     },
+     {
+      "player_name": "森煌誠",
+      "affiliation": "NTT東日本",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.25
+     }
+    ]
+   },
+   {
+    "team": "D",
+    "candidates": [
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "織田翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.25
+     },
+     {
+      "player_name": "池村健太郎",
+      "affiliation": "トヨタ自動車",
+      "position": "投手",
+      "prob": 0.25
+     }
+    ]
+   },
+   {
+    "team": "H",
+    "candidates": [
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.55
+     },
+     {
+      "player_name": "織田翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.25
+     },
+     {
+      "player_name": "中西佳虎",
+      "affiliation": "大阪桐蔭",
+      "position": "捕手",
+      "prob": 0.2
+     }
+    ]
+   },
+   {
+    "team": "F",
+    "candidates": [
+     {
+      "player_name": "織田翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.6
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.25
+     },
+     {
+      "player_name": "鎌田州真",
+      "affiliation": "徳島インディゴソックス",
+      "position": "投手",
+      "prob": 0.15
+     }
+    ]
+   },
+   {
+    "team": "B",
+    "candidates": [
+     {
+      "player_name": "織田翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.4
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.35
+     },
+     {
+      "player_name": "沢山優介",
+      "affiliation": "ヤマハ",
+      "position": "投手",
+      "prob": 0.25
+     }
+    ]
+   },
+   {
+    "team": "E",
+    "candidates": [
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.45
+     },
+     {
+      "player_name": "織田翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "森煌誠",
+      "affiliation": "NTT東日本",
+      "position": "投手",
+      "prob": 0.25
+     }
+    ]
+   },
+   {
+    "team": "L",
+    "candidates": [
+     {
+      "player_name": "織田翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.45
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.35
+     },
+     {
+      "player_name": "藤澤涼介",
+      "affiliation": "東京ガス",
+      "position": "外野手",
+      "prob": 0.2
+     }
+    ]
+   },
+   {
+    "team": "M",
+    "candidates": [
+     {
+      "player_name": "織田翔希",
+      "affiliation": "横浜",
+      "position": "投手",
+      "prob": 0.5
+     },
+     {
+      "player_name": "菰田陽生",
+      "affiliation": "山梨学院",
+      "position": "投手",
+      "prob": 0.3
+     },
+     {
+      "player_name": "森煌誠",
+      "affiliation": "NTT東日本",
+      "position": "投手",
+      "prob": 0.2
+     }
+    ]
+   }
+  ],
+  "contested": [
+   {
+    "player_name": "織田翔希",
+    "affiliation": "横浜",
+    "position": "投手",
+    "num_teams": 5
+   },
+   {
+    "player_name": "菰田陽生",
+    "affiliation": "山梨学院",
+    "position": "投手",
+    "num_teams": 4
+   }
+  ],
+  "lotte": [
+   {
+    "player_name": "織田翔希",
+    "affiliation": "横浜",
+    "position": "投手",
+    "round": 1,
+    "reason": "高校生投手では上位指名候補として評価が集まる見込みで、将来の先発陣を担う素材として入札すると予測する。",
+    "sources": []
+   },
+   {
+    "player_name": "森煌誠",
+    "affiliation": "NTT東日本",
+    "position": "投手",
+    "round": 2,
+    "reason": "社会人で実戦経験を積んだ投手であり、先発・救援の両面で早期戦力化を見込める候補として予測する。",
+    "sources": []
+   },
+   {
+    "player_name": "杉崎成",
+    "affiliation": "JR東日本",
+    "position": "内野手",
+    "round": 3,
+    "reason": "社会人内野手としての守備力と実戦対応力を評価し、内野の層を厚くする指名になるとみる。",
+    "sources": []
+   },
+   {
+    "player_name": "藤澤涼介",
+    "affiliation": "東京ガス",
+    "position": "外野手",
+    "round": 4,
+    "reason": "外野の競争を促す社会人選手として、打撃と守備走塁の即戦力性を見込んだ指名を予測する。",
+    "sources": []
+   },
+   {
+    "player_name": "鎌田州真",
+    "affiliation": "徳島インディゴソックス",
+    "position": "投手",
+    "round": 5,
+    "reason": "独立リーグでの登板経験を持つ投手であり、育成余地とブルペンの選択肢を広げる指名として予測する。",
+    "sources": []
+   }
+  ]
+ }
+}
