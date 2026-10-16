@@ -14,7 +14,7 @@ from pathlib import Path
 from src.candidates import load_candidates
 from src.matching import Master, MatchStatus, normalize_name
 from src.run import RunLog
-from src.schema import Prediction, TeamCode
+from src.schema import Prediction, TeamCode, _PlayerRef
 from src.scorer import _mentions, load_predictions, top_candidate
 
 TEAM_NAMES = {
@@ -68,19 +68,20 @@ def group(preds: list[Prediction]) -> Groups:
     return out
 
 
-def _mode(names: list[str]) -> tuple[str, int]:
-    """最も多い名前と、その回数。同数なら先に出た方（実行番号の小さい方）。"""
-    counts = Counter(normalize_name(n) for n in names)
+def _mode[R: _PlayerRef](refs: list[R]) -> tuple[R, int]:
+    """最も多く挙がった選手（最初に挙げた実行の記述）と、その回数。同数なら先に出た方（実行番号の小さい方）。"""
+    counts = Counter(normalize_name(r.player_name) for r in refs)
     best = max(counts.values())
-    name = next(n for n in names if counts[normalize_name(n)] == best)
-    return name, best
+    ref = next(r for r in refs if counts[normalize_name(r.player_name)] == best)
+    return ref, best
 
 
-def _cell(names: list[str]) -> str:
-    if not names:
+def _cell(refs: list[_PlayerRef]) -> str:
+    """「選手名・ポジション（回数/実行数）」。"""
+    if not refs:
         return "—"
-    name, k = _mode(names)
-    return f"{name}（{k}/{len(names)}）"
+    ref, k = _mode(refs)
+    return f"{ref.player_name}・{ref.position.value}（{k}/{len(refs)}）"
 
 
 def first_round_table(runs_by_model: dict[str, list[Prediction]]) -> Table:
@@ -91,9 +92,9 @@ def first_round_table(runs_by_model: dict[str, list[Prediction]]) -> Table:
         row = [TEAM_NAMES[team]]
         modes = set()
         for m in models:
-            names = [top_candidate(b).player_name for p in runs_by_model[m] for b in p.output.first_round if b.team == team]
-            row.append(_cell(names))
-            modes.add(normalize_name(_mode(names)[0]) if names else None)
+            refs = [top_candidate(b) for p in runs_by_model[m] for b in p.output.first_round if b.team == team]
+            row.append(_cell(refs))
+            modes.add(normalize_name(_mode(refs)[0].player_name) if refs else None)
         rows.append(row)
         highlight.append(len(models) > 1 and len(modes) == 1 and None not in modes)
     return Table(["球団", *map(label, models)], rows, highlight)
@@ -125,9 +126,22 @@ def lotte_table(runs_by_model: dict[str, list[Prediction]]) -> Table:
     for rnd in range(1, 6):
         row = [f"{rnd}位"]
         for m in models:
-            row.append(_cell([pick.player_name for p in runs_by_model[m] for pick in p.output.lotte if pick.round == rnd]))
+            row.append(_cell([pick for p in runs_by_model[m] for pick in p.output.lotte if pick.round == rnd]))
         rows.append(row)
     return Table(["順位", *map(label, models)], rows)
+
+
+def lotte_reason_table(runs: list[Prediction]) -> Table:
+    """1つのモデルのロッテ1〜5位。順位ごとに最も多く挙がった選手と、その選手を挙げた最初の実行の理由。"""
+    rows = []
+    for rnd in range(1, 6):
+        picks = [pick for p in runs for pick in p.output.lotte if pick.round == rnd]
+        if not picks:
+            rows.append([f"{rnd}位", "—", ""])
+            continue
+        pick, k = _mode(picks)
+        rows.append([f"{rnd}位", f"{pick.player_name}・{pick.position.value}（{k}/{len(picks)}）", pick.reason])
+    return Table(["順位", "予想した選手", "AI が書いた理由"], rows)
 
 
 def match_table(groups: Groups, master: Master) -> Table:
@@ -176,6 +190,7 @@ class Section:
     title: str
     note: str
     table: Table
+    style: str = ""  # 画像の表の見た目（"reasons": 理由の長い文を折り返す）
 
 
 def sections(preds: list[Prediction], logs: list[RunLog], master: Master) -> list[Section]:
@@ -188,7 +203,7 @@ def sections(preds: list[Prediction], logs: list[RunLog], master: Master) -> lis
             Section(
                 f"{cond}_first_round",
                 f"12球団の1位入札予想（{name}）",
-                "各AIがいちばん確率が高いとした選手。（ ）は、その選手を挙げた回数 / 予想の回数。色付きの行は全AIの予想が一致。",
+                "各AIがいちばん確率が高いとした選手とポジション。（ ）は、その選手を挙げた回数 / 予想の回数。色付きの行は全AIの予想が一致。",
                 first_round_table(by_model),
             ),
             Section(
@@ -197,7 +212,17 @@ def sections(preds: list[Prediction], logs: list[RunLog], master: Master) -> lis
                 "その選手を1位の本命に挙げた球団の数（予想ごとの平均）。どれかのAIで2球団以上のものだけ。",
                 contest_table(by_model),
             ),
-            Section(f"{cond}_lotte", f"ロッテの1〜5位予想（{name}）", "（ ）は、その選手を挙げた回数 / 予想の回数。", lotte_table(by_model)),
+            Section(f"{cond}_lotte", f"ロッテの1〜5位予想（{name}）", "選手とポジション。（ ）は、その選手を挙げた回数 / 予想の回数。", lotte_table(by_model)),
+        ]
+        out += [
+            Section(
+                f"{cond}_lotte_reasons_{m}",
+                f"ロッテの1〜5位予想と理由：{label(m)}（{name}）",
+                "順位ごとに最も多く挙がった選手と、その選手を挙げた回の理由（AI の出力をそのまま掲載）。（ ）は、挙げた回数 / 予想の回数。",
+                lotte_reason_table(by_model[m]),
+                style="reasons",
+            )
+            for m in sorted(by_model)
         ]
     out.append(
         Section("match", "候補者名簿との照合", "予想に出てきた選手（予想ごとに重複を除いて数えた延べ人数）のうち、名簿にない名前の数。", match_table(groups, master))

@@ -36,10 +36,13 @@ body {
 h1 { font-size: 30px; font-weight: 700; margin-bottom: 10px; }
 .note { font-size: 17px; color: #4a5872; margin-bottom: 22px; line-height: 1.6; }
 table { width: 100%%; border-collapse: collapse; font-size: 20px; }
-th { background: #1b2a4a; color: #ffffff; font-weight: 700; padding: 12px 14px; text-align: left; }
+th { background: #1b2a4a; color: #ffffff; font-weight: 700; padding: 12px 14px; text-align: left; white-space: nowrap; }
 td { padding: 11px 14px; border-bottom: 1px solid #d9dfea; }
 td:first-child { font-weight: 700; white-space: nowrap; }
 tr.hl td { background: #fdecec; }
+table.reasons { font-size: 17px; }
+table.reasons td { vertical-align: top; line-height: 1.6; }
+table.reasons td:nth-child(2) { white-space: nowrap; font-weight: 700; }
 tr.hl td:first-child { box-shadow: inset 6px 0 0 #d6332e; }
 .empty { font-size: 20px; padding: 16px 0; }
 .credit { margin-top: 20px; font-size: 14px; color: #8a94a8; text-align: right; }
@@ -54,7 +57,8 @@ def section_html(sec: Section) -> str:
         for i, row in enumerate(t.rows):
             cls = ' class="hl"' if i < len(t.highlight) and t.highlight[i] else ""
             body += f"<tr{cls}>" + "".join(f"<td>{html.escape(c)}</td>" for c in row) + "</tr>"
-        content = f"<table><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table>"
+        cls_attr = f' class="{sec.style}"' if sec.style else ""
+        content = f"<table{cls_attr}><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table>"
     else:
         content = f'<p class="empty">{html.escape(t.empty or "（該当なし）")}</p>'
     return (
