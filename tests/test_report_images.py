@@ -18,6 +18,11 @@ def test_section_html_escapes_and_highlights() -> None:
     assert '<tr class="hl"><td>巨人</td>' in page and "<tr><td>阪神</td>" in page
 
 
+def test_section_html_reasons_style() -> None:
+    page = section_html(Section("x", "t", "n", Table(["順位", "選手", "理由"], [["1位", "a", "b"]]), style="reasons"))
+    assert '<table class="reasons">' in page
+
+
 def test_section_html_empty_table() -> None:
     page = section_html(Section("x", "t", "n", Table(["a"], [], empty="なし")))
     assert '<p class="empty">なし</p>' in page and "<table>" not in page
