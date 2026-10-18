@@ -26,6 +26,7 @@ def _row(outlet: str, team: str, name: str, published_on: str = "2026-10-15") ->
         "player_name": name,
         "affiliation": "ダミー大",
         "position": "投手",
+        "note": "",
     }
 
 

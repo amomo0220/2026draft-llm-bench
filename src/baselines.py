@@ -18,7 +18,7 @@ from pydantic import BaseModel, ConfigDict, HttpUrl, ValidationError
 from src.matching import normalize_name
 from src.schema import FirstRoundBid, NonEmptyStr, PlayerProb, Position, TeamCode
 
-COLUMNS = ["outlet", "published_on", "source_url", "team", "player_name", "affiliation", "position"]
+COLUMNS = ["outlet", "published_on", "source_url", "team", "player_name", "affiliation", "position", "note"]
 # AI の予想（1週間前予想）を実行した日。これより大きく後の予想は、条件をそろえた比較にならない
 AI_PREDICTION_DATE = date(2026, 10, 15)
 
@@ -33,6 +33,7 @@ class MediaPick(BaseModel):
     player_name: NonEmptyStr
     affiliation: NonEmptyStr
     position: Position
+    note: str = ""  # 補足（例: 二刀流の選手をどちらのポジションで数えたか、記事の書き方）
 
 
 def load_media_picks(path: Path) -> list[MediaPick]:
