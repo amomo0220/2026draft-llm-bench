@@ -151,7 +151,7 @@
   - `data/baselines/media_picks.csv`: `outlet, published_on, source_url, team, player_name, affiliation, position`（1行＝1媒体の1球団）
   - 多数決: 球団ごとに、媒体の数で割った割合を確率とみなす。採点は1位入札の指標（的中・ブライアースコア・ポジション）だけ。ロッテの2〜5位を予想する媒体は少ないので対象外
 - 有料記事や、表が画像だけの記事は読めないことがある。集めた結果はユーザーが目で確かめる
-- 実装（未着手）: `src/baselines.py` で CSV を検証・集計し、採点に渡す
+- 実装: `src/baselines.py`（`uv run python -m src.baselines data/baselines/media_picks.csv`）で CSV を検証し、球団ごとの多数決を予測と同じ `FirstRoundBid` の形にする。採点は scorer の関数（的中・ブライアースコア・ポジション）をそのまま使う。AI の予想日（10/15）より後の記事には印を付けて表示する
 
 ### 3.4 候補者マスタ（正解判定の基準）
 
