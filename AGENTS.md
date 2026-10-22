@@ -77,6 +77,8 @@ uv run python -m src.build_candidates    # 候補者マスタの生成（data/ra
 uv run python -m src.candidates          # 候補者マスタの検証
 uv run python -m src.draft_db_mcp        # MCP サーバー起動
 uv run python -m src.prereg_guard        # 事前登録した predictions/ が変わっていないか（CI でも実行）
+uv run python -m src.baselines data/baselines/media_picks.csv   # メディア予想（ベースライン）の検証と多数決
+uv run python -m src.report_results      # 答え合わせの表（--images で画像）
 ```
 
 ## コーディング規約

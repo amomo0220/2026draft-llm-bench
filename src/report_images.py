@@ -43,6 +43,8 @@ tr.hl td { background: #fdecec; }
 table.reasons { font-size: 17px; }
 table.reasons td { vertical-align: top; line-height: 1.6; }
 table.reasons td:nth-child(2) { white-space: nowrap; font-weight: 700; }
+table.results { font-size: 18px; }
+table.results td { white-space: nowrap; }
 tr.hl td:first-child { box-shadow: inset 6px 0 0 #d6332e; }
 .empty { font-size: 20px; padding: 16px 0; }
 .credit { margin-top: 20px; font-size: 14px; color: #8a94a8; text-align: right; }

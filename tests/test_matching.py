@@ -19,6 +19,7 @@ def _cand(pid: str, name: str, team: str, category: Category = Category.HIGH_SCH
         ("八木　月輝", "八木 月輝"),  # 全角空白
         ("ささき・だいすけ", "ささきだいすけ"),  # 中黒
         ("ＡＢＣ", "ABC"),  # 全角英字（NFKC）
+        ("榊\U000e0100原\u3000七斗", "榊原 七斗"),  # NPB 公式の表記にある異体字セレクタ（見えない文字）
     ],
 )
 def test_normalize_name_equal(a: str, b: str) -> None:

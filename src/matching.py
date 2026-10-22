@@ -45,11 +45,14 @@ _VARIANTS = str.maketrans(
     }
 )
 _SEPARATORS = re.compile(r"[\s・･]+")
+# 異体字セレクタ（見えない文字）。NPB 公式の表記で「榊󠄀原」のように付くことがある
+_VARIATION_SELECTORS = re.compile("[\ufe00-\ufe0f\U000e0100-\U000e01ef]")
 
 
 def normalize_name(name: str) -> str:
-    """突合用の名前キー。NFKC 正規化、異体字の統一、空白・中黒の除去。"""
-    return _SEPARATORS.sub("", unicodedata.normalize("NFKC", name).translate(_VARIANTS))
+    """突合用の名前キー。NFKC 正規化、異体字セレクタの除去、異体字の統一、空白・中黒の除去。"""
+    name = _VARIATION_SELECTORS.sub("", unicodedata.normalize("NFKC", name))
+    return _SEPARATORS.sub("", name.translate(_VARIANTS))
 
 
 _AFFILIATION_SUFFIX = re.compile(r"(高等学校|高校|高|大学|大)$")
