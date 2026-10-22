@@ -1,0 +1,198 @@
+{
+ "first_round": [
+  {
+   "team": "G",
+   "bid": {
+    "player_name": "織田 翔希",
+    "affiliation": "横浜",
+    "position": "投手"
+   },
+   "won_lottery": true,
+   "final": {
+    "player_name": "織田 翔希",
+    "affiliation": "横浜",
+    "position": "投手"
+   }
+  },
+  {
+   "team": "T",
+   "bid": {
+    "player_name": "榊原 七斗",
+    "affiliation": "明治大学",
+    "position": "外野手"
+   },
+   "won_lottery": true,
+   "final": {
+    "player_name": "榊原 七斗",
+    "affiliation": "明治大学",
+    "position": "外野手"
+   }
+  },
+  {
+   "team": "DB",
+   "bid": {
+    "player_name": "星野 世那",
+    "affiliation": "大阪商業大学",
+    "position": "投手"
+   },
+   "won_lottery": true,
+   "final": {
+    "player_name": "星野 世那",
+    "affiliation": "大阪商業大学",
+    "position": "投手"
+   }
+  },
+  {
+   "team": "C",
+   "bid": {
+    "player_name": "山里 宝",
+    "affiliation": "亜細亜大学",
+    "position": "内野手"
+   },
+   "won_lottery": true,
+   "final": {
+    "player_name": "山里 宝",
+    "affiliation": "亜細亜大学",
+    "position": "内野手"
+   }
+  },
+  {
+   "team": "S",
+   "bid": {
+    "player_name": "藤澤 涼介",
+    "affiliation": "東京ガス",
+    "position": "外野手"
+   },
+   "won_lottery": true,
+   "final": {
+    "player_name": "藤澤 涼介",
+    "affiliation": "東京ガス",
+    "position": "外野手"
+   }
+  },
+  {
+   "team": "D",
+   "bid": {
+    "player_name": "渡部 海",
+    "affiliation": "青山学院大学",
+    "position": "捕手"
+   },
+   "won_lottery": false,
+   "final": {
+    "player_name": "宮原 廉",
+    "affiliation": "近畿大学",
+    "position": "投手"
+   }
+  },
+  {
+   "team": "H",
+   "bid": {
+    "player_name": "鈴木 泰成",
+    "affiliation": "青山学院大学",
+    "position": "投手"
+   },
+   "won_lottery": true,
+   "final": {
+    "player_name": "鈴木 泰成",
+    "affiliation": "青山学院大学",
+    "position": "投手"
+   }
+  },
+  {
+   "team": "F",
+   "bid": {
+    "player_name": "菰田 陽生",
+    "affiliation": "山梨学院",
+    "position": "投手"
+   },
+   "won_lottery": true,
+   "final": {
+    "player_name": "菰田 陽生",
+    "affiliation": "山梨学院",
+    "position": "投手"
+   }
+  },
+  {
+   "team": "B",
+   "bid": {
+    "player_name": "角田 楓斗",
+    "affiliation": "富士大学",
+    "position": "投手"
+   },
+   "won_lottery": true,
+   "final": {
+    "player_name": "角田 楓斗",
+    "affiliation": "富士大学",
+    "position": "投手"
+   }
+  },
+  {
+   "team": "E",
+   "bid": {
+    "player_name": "渡部 海",
+    "affiliation": "青山学院大学",
+    "position": "捕手"
+   },
+   "won_lottery": true,
+   "final": {
+    "player_name": "渡部 海",
+    "affiliation": "青山学院大学",
+    "position": "捕手"
+   }
+  },
+  {
+   "team": "L",
+   "bid": {
+    "player_name": "川尻 啓人",
+    "affiliation": "亜細亜大学",
+    "position": "投手"
+   },
+   "won_lottery": true,
+   "final": {
+    "player_name": "川尻 啓人",
+    "affiliation": "亜細亜大学",
+    "position": "投手"
+   }
+  },
+  {
+   "team": "M",
+   "bid": {
+    "player_name": "鈴木 泰成",
+    "affiliation": "青山学院大学",
+    "position": "投手"
+   },
+   "won_lottery": false,
+   "final": {
+    "player_name": "米沢 友翔",
+    "affiliation": "関西大学",
+    "position": "投手"
+   }
+  }
+ ],
+ "lotte": [
+  {
+   "player_name": "前田 侑大",
+   "affiliation": "高岡第一",
+   "position": "投手",
+   "round": 2
+  },
+  {
+   "player_name": "長屋 竣大",
+   "affiliation": "ENEOS",
+   "position": "投手",
+   "round": 3
+  },
+  {
+   "player_name": "黒田 義信",
+   "affiliation": "東日本国際大学",
+   "position": "外野手",
+   "round": 4
+  },
+  {
+   "player_name": "新城 楓雅",
+   "affiliation": "奈良大付",
+   "position": "投手",
+   "round": 5
+  }
+ ]
+}
