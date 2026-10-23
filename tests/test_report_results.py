@@ -7,6 +7,7 @@ from src.matching import Master
 from src.report_results import (
     BASELINE_LABEL,
     first_round_result_table,
+    lotte_reason_result_table,
     lotte_result_table,
     sections,
     summary_table,
@@ -55,4 +56,23 @@ def test_summary_includes_baseline_row() -> None:
 
 def test_sections_per_condition() -> None:
     keys = [s.key for s in sections([_pred("r1")], ACTUAL, Master([]), {}, BASE)]
-    assert keys == ["results_summary", "results_first_round_D", "results_lotte_D"]
+    assert keys == ["results_summary", "results_first_round_D", "results_lotte_D", "results_lotte_reasons_D_m1"]
+
+
+def test_lotte_reason_result_lists_every_run_with_verdict() -> None:
+    p1 = _pred("r1")
+    p2 = _pred("r2")
+    p2.output.lotte[1].player_name = "ロッテ 三位"  # 実際は3位の選手を2位に挙げた
+    p2.output.lotte[2].player_name = "別の 捕手"
+    p2.output.lotte[2].position = p2.output.lotte[1].position  # 捕手（実際の3位は内野手）
+    p2.output.lotte[3].player_name = "別の 外野手"  # ポジションは実際の4位と同じ外野手
+    table = lotte_reason_result_table([p1, p2], ACTUAL)
+    assert table.header == ["順位", "実際の指名", "AI の予想", "判定", "AI が書いた理由"]
+    assert table.rows[0][:4] == ["1位", "ロッテ 一位・投手", "1回目：ロッテ 一位・投手", "○ 的中"]
+    assert table.rows[1][:2] == ["", ""]  # 同じ順位の2回目は、順位と実際の指名を省く
+    assert table.rows[3][3] == "△ 別の順位で獲得"  # 2位に挙げた「ロッテ 三位」
+    assert table.rows[5][3] == "×"  # 3位の「別の 捕手」
+    assert table.rows[7][3] == "ポジション一致"  # 4位の「別の 外野手」
+    assert table.rows[8][1] == "（指名なし）"  # ダミーの正解はロッテ4位まで
+    assert table.rows[0][4] == "ダミー" and table.highlight[0] is True and table.highlight[5] is False
+    assert len(table.rows) == 10  # 5順位 × 2回
