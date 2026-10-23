@@ -133,6 +133,36 @@ def lotte_result_table(runs_by_model: dict[str, list[Prediction]], actual: Actua
     return Table(["順位", "実際の指名", *map(label, models)], rows)
 
 
+def lotte_reason_result_table(runs: list[Prediction], actual: ActualDraft) -> Table:
+    """1つのモデルのロッテ1〜5位を、3回分すべて理由つきで答え合わせする。
+
+    判定: ○＝その順位で的中、△＝ロッテが別の順位で獲得した選手（1位は最終的な1位）、
+    ポジション一致＝選手は外れたがポジションは実際の指名と同じ、×＝それ以外。
+    """
+    truth = {1: actual.by_team()[TeamCode.M].bid}
+    truth.update({p.round: p for p in actual.lotte})
+    acquired = [p.player_name for p in actual.lotte_acquired()]
+    rows, highlight = [], []
+    for rnd in range(1, 6):
+        t = truth.get(rnd)
+        for i, p in enumerate(runs, start=1):
+            pick = next((pk for pk in p.output.lotte if pk.round == rnd), None)
+            if pick is None:
+                continue
+            if t is not None and _same(pick.player_name, t.player_name):
+                verdict = "○ 的中"
+            elif any(_same(pick.player_name, a) for a in acquired):
+                verdict = "△ 別の順位で獲得"
+            elif t is not None and pick.position == t.position:
+                verdict = "ポジション一致"
+            else:
+                verdict = "×"
+            actual_cell = (f"{t.player_name}・{t.position.value}" if t else "（指名なし）") if i == 1 else ""
+            rows.append([f"{rnd}位" if i == 1 else "", actual_cell, f"{i}回目：{pick.player_name}・{pick.position.value}", verdict, pick.reason])
+            highlight.append(verdict.startswith(("○", "△")))
+    return Table(["順位", "実際の指名", "AI の予想", "判定", "AI が書いた理由"], rows, highlight)
+
+
 def sections(preds: list[Prediction], actual: ActualDraft, master: Master, checks, baseline: list[FirstRoundBid]) -> list[Section]:
     scores = [score_run(p, actual, master, checks) for p in preds]
     groups = group(preds)
@@ -167,6 +197,17 @@ def sections(preds: list[Prediction], actual: ActualDraft, master: Master, check
                 style="results",
             )
         )
+        out += [
+            Section(
+                f"results_lotte_reasons_{cond}_{m}",
+                f"ロッテの答え合わせと理由：{label(m)}（{name}）",
+                "3回分の予想と、AI が書いた理由（AI の出力をそのまま掲載）。判定は ○＝その順位で的中、△＝ロッテが別の順位で獲得した選手（1位は最終的な1位）、"
+                "ポジション一致＝選手は外れたがポジションは同じ、×＝それ以外。色付きの行は ○ と △。",
+                lotte_reason_result_table(groups[cond][m], actual),
+                style="lotte-reasons",
+            )
+            for m in sorted(groups[cond])
+        ]
     return out
 
 

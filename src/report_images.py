@@ -45,6 +45,10 @@ table.reasons td { vertical-align: top; line-height: 1.6; }
 table.reasons td:nth-child(2) { white-space: nowrap; font-weight: 700; }
 table.results { font-size: 18px; }
 table.results td { white-space: nowrap; }
+table.lotte-reasons { font-size: 16px; }
+table.lotte-reasons td { vertical-align: top; line-height: 1.55; padding: 9px 10px; }
+table.lotte-reasons td:nth-child(-n+4) { white-space: nowrap; }
+table.lotte-reasons td:nth-child(2), table.lotte-reasons td:nth-child(4) { font-weight: 700; }
 tr.hl td:first-child { box-shadow: inset 6px 0 0 #d6332e; }
 .empty { font-size: 20px; padding: 16px 0; }
 .credit { margin-top: 20px; font-size: 14px; color: #8a94a8; text-align: right; }
